@@ -1,705 +1,83 @@
 # CLAUDE.md – Precision Fitness & Flow
-## Product Requirements Document v1.0
-## Open Source | GitHub | Web + Android + iOS
+## Project Guidelines & Context
 
-Lies dieses Dokument vollständig bevor du eine einzige Zeile Code schreibst.
-Stelle keine Fragen – alle Entscheidungen sind hier getroffen.
-
----
-
-## Entwicklungsstand
-```
-Stand: Q2 2026
-Abgeschlossene Phasen: 1, 2, 3, 4, 5, 6, 6.5, 7
-Offene Phasen: Keine (V1 fertiggestellt)
-Bekannte Probleme: –
-Nächster Schritt: Projekt-Maintenance / V2 Features
-Privacy-Stack: nicht aktiv (keine personenbezogenen Daten)
-```
-
-
-## Phase 0 – Klarheit (bereits entschieden)
-
-```
-1. WAS: Strukturierte No-Equipment-Fitness-App mit 3-Wochen-Plan,
-   HIIT-Timer und geführten Trainingseinheiten. Keine Registrierung,
-   keine Cloud, keine KI-API. Alles läuft lokal auf dem Gerät.
-
-2. FÜR WEN: Jedermann – keine Anmeldung, kein Konto, sofort nutzbar.
-
-3. WO: Web (PWA) + Android + iOS via Flutter. Ein Codebase für alle Plattformen.
-
-4. BETRIEBSKOSTEN: 0 € – keine API, kein Backend, kein Hosting nötig.
-   Distribution: Web (GitHub Pages / Netlify), App Stores optional.
-
-5. HARTE GRENZEN:
-   - Keine Nutzerdaten erfassen (kein Name, keine E-Mail, kein Account)
-   - Keine Telemetrie, kein Analytics, kein Tracking
-   - Keine externe API (kein LLM, kein Backend)
-   - Kein Cloud-Sync – Trainingshistorie nur lokal auf dem Gerät
-   - Open Source: MIT-Lizenz, vollständig auf GitHub
-
-6. ERFOLG: Der HIIT-Timer läuft korrekt mit 30/20-Taktung,
-   zeigt die aktuelle Übung an und signalisiert akustisch den Phasenwechsel.
-```
+Dieses Dokument dient als zentrale Wissensbasis für die Weiterentwicklung der App. Es enthält verbindliche Architektur-Entscheidungen, Design-Regeln und Coding-Standards.
 
 ---
 
 ## 1. Produkt-Vision
 
-**Precision Fitness & Flow** ist eine kostenlose, werbefreie, datenschutzfreundliche
-Fitness-App für strukturiertes Körpergewichtstraining ohne Equipment.
+**Precision Fitness & Flow** ist eine kostenlose, werbefreie und datenschutzfreundliche Fitness-App für Eigengewichtstraining.
 
-Die App führt Nutzer durch einen **3-Wochen-Trainingsplan** mit täglich geführten
-Einheiten – entweder als satzbasiertes Krafttraining oder als zeitbasiertes HIIT.
-Ein präziser **Chronos-Timer** steuert Belastung, Pause und Übungsübergänge mit
-akustischen Signalen.
-
-**Kein Account. Keine Daten. Kein Internet nötig.**
-
-- **Plattformen:** Web (PWA), Android, iOS
-- **Framework:** Flutter (Dart) – ein Codebase für alle Plattformen
-- **Nutzer:** Unbegrenzt, anonym, keine Rollen
-- **Distribution:** GitHub (Open Source, MIT), GitHub Pages (Web), App Stores (optional V2)
-- **Betriebskosten:** 0 €
+- **Ziel**: Strukturierter 3-Wochen-Trainingsplan (Kraft & HIIT).
+- **Philosophie**: Kein Account, keine Cloud, kein Internet nötig. Alles läuft lokal.
+- **Plattformen**: Web (PWA), Android, iOS via Flutter.
+- **Lizanz**: MIT (Open Source).
 
 ---
 
 ## 2. Tech Stack (verbindlich)
 
-```
-Framework:        Flutter (Dart) – Cross-Platform Web + Android + iOS
-State Management: Riverpod (null-safe, testbar, kein BuildContext-Chaos)
-Lokale DB:        Hive (NoSQL, Flutter-nativ, schnell, kein SQL-Overhead)
-Timer:            dart:async – isolierter Timer-Service, kein setState-Spam
-Audio:            audioplayers (^5.x) – lokale Sound-Assets, kein Netz nötig
-Navigation:       GoRouter (deklarativ, deep-link-fähig für PWA)
-Tests:            flutter_test + mocktail
-Linting:          flutter_lints (very_good_analysis optional)
-Build Web:        flutter build web --release (→ GitHub Pages / Netlify)
-Build Android:    flutter build apk / appbundle
-Build iOS:        flutter build ipa
-CI/CD:            GitHub Actions (build + test automatisch bei Push)
-```
+- **Framework**: Flutter (Dart)
+- **State Management**: Riverpod (Notifier/Provider)
+- **Lokale DB**: Hive (Box-basiert, NoSQL)
+- **Navigation**: GoRouter
+- **Audio**: audioplayers (^5.x)
+- **Linting**: flutter_lints
+- **CI/CD**: GitHub Actions (Build & Test)
 
 ---
 
-## 3. Projektstruktur
+## 3. Architektur & State Management
 
-```
-precision_fitness_flow/
-├── CLAUDE.md                          ← dieses Dokument
-├── README.md                          ← GitHub-Dokumentation (EN)
-├── LICENSE                            ← MIT
-├── pubspec.yaml
-├── analysis_options.yaml
-├── .github/
-│   └── workflows/
-│       ├── build.yml                  ← Flutter build + test (alle Plattformen)
-│       └── deploy_web.yml             ← GitHub Pages Deploy bei Push auf main
-│
-├── lib/
-│   ├── main.dart                      ← App-Einstieg, Hive-Init, Riverpod-Scope
-│   ├── app.dart                       ← MaterialApp + GoRouter + Theme
-│   │
-│   ├── core/
-│   │   ├── constants/
-│   │   │   ├── app_colors.dart        ← Alle Farben (kein Hardcoding im Widget)
-│   │   │   ├── app_text_styles.dart
-│   │   │   └── app_durations.dart     ← Timer-Konstanten (30s, 20s, etc.)
-│   │   ├── router/
-│   │   │   └── app_router.dart        ← GoRouter-Konfiguration
-│   │   ├── services/
-│   │   │   ├── timer_service.dart     ← Chronos-Timer (isoliert, Riverpod-Provider)
-│   │   │   ├── audio_service.dart     ← Sound-Signale (work / rest / transition)
-│   │   │   └── history_service.dart   ← Hive-Zugriff für Trainingshistorie
-│   │   └── utils/
-│   │       ├── duration_formatter.dart ← "00:30" Formatierung
-│   │       └── week_calculator.dart    ← Aktuelle Woche + Tag berechnen
-│   │
-│   ├── data/
-│   │   ├── models/
-│   │   │   ├── exercise.dart          ← Übungsmodell (Name, Fokus, Typ, Hinweise)
-│   │   │   ├── workout.dart           ← Trainingseinheit (Typ, Sets/Intervalle)
-│   │   │   ├── training_day.dart      ← Ein Tag im 3-Wochen-Plan
-│   │   │   ├── workout_session.dart   ← Absolvierte Einheit (Hive-Objekt)
-│   │   │   └── timer_state.dart       ← Enum: work / rest / transition / idle
-│   │   ├── repositories/
-│   │   │   └── history_repository.dart ← Abstraktionsschicht über Hive
-│   │   └── workout_plan.dart          ← Kompletter 3-Wochen-Plan als Dart-Konstante
-│   │
-│   ├── features/
-│   │   ├── home/
-│   │   │   ├── home_page.dart         ← Startseite: heutiger Tag + Wochenübersicht
-│   │   │   └── home_controller.dart   ← Riverpod-Provider für Home-Logik
-│   │   ├── plan/
-│   │   │   ├── plan_overview_page.dart ← Alle 21 Tage als Übersicht
-│   │   │   └── day_detail_page.dart    ← Detailansicht eines Trainingstags
-│   │   ├── workout/
-│   │   │   ├── workout_page.dart       ← Haupt-Training-Screen (Timer + Übung)
-│   │   │   ├── workout_controller.dart ← Riverpod: Timer-State + Schritt-Logik
-│   │   │   ├── strength_view.dart      ← View für Kraft-Tage (satzbasiert)
-│   │   │   ├── hiit_view.dart          ← View für HIIT-Tage (zeitbasiert)
-│   │   │   └── workout_complete_page.dart ← Abschluss-Screen nach Training
-│   │   ├── exercises/
-│   │   │   ├── exercise_list_page.dart ← Übungsbibliothek (alle 6 Übungen)
-│   │   │   └── exercise_detail_page.dart ← Ausführungshinweise + Gelenkschutz
-│   │   └── history/
-│   │       └── history_page.dart       ← Absolvierte Einheiten (lokal)
-│   │
-│   └── widgets/
-│       ├── chronos_timer_widget.dart   ← Großer Countdown-Ring
-│       ├── phase_indicator.dart        ← Work / Rest / Transition Badge
-│       ├── exercise_card.dart          ← Übungskarte mit Fokus-Muskel
-│       ├── set_counter.dart            ← Satz-Zähler für Kraft-Tage
-│       ├── safety_hint_banner.dart     ← Gelenkschutz-Hinweis (plyometrisch)
-│       └── week_progress_bar.dart      ← Fortschritt in der aktuellen Woche
-│
-├── assets/
-│   ├── audio/
-│   │   ├── beep_work.mp3              ← Signal: Belastungsphase startet
-│   │   ├── beep_rest.mp3              ← Signal: Pause startet
-│   │   └── beep_transition.mp3        ← Signal: Übungswechsel
-│   └── images/
-│       └── (optional: Übungssilhouetten SVG)
-│
-└── test/
-    ├── unit/
-    │   ├── timer_service_test.dart
-    │   ├── workout_plan_test.dart
-    │   └── week_calculator_test.dart
-    └── widget/
-        ├── chronos_timer_widget_test.dart
-        └── hiit_view_test.dart
-```
+- **Trennung der Belange**: Geschäftslogik liegt in den Controllern/Services, nicht in den Widgets.
+- **Timer-Service**: Isoliert in `lib/core/services/timer_service.dart`. Widgets konsumieren den Status über Riverpod.
+- **Datenmodell**: Alle Modelle sind in `lib/data/models/` zentralisiert. Hive-Adapter werden per `build_runner` generiert.
+- **Trainingsplan**: Der komplette Plan ist als statische Konstante in `lib/data/workout_plan.dart` hinterlegt.
 
 ---
 
-## 4. Trainingsplan – vollständige Datenstruktur
+## 4. UI-Design-Regeln (Dark-Mode-First)
 
-### 4.1 Übungsdatenbank (6 Kernübungen)
+**Farben (`lib/core/constants/app_colors.dart`):**
+- Hintergrund: GitHub Dark Style (`#0D1117`)
+- Akzent: Orange-Rot (`#F78166`)
+- Phasen: Grün (Work), Blau (Rest), Gelb (Transition)
 
-```dart
-// lib/data/models/exercise.dart
-
-enum ExerciseType { strength, metabolic, hiit }
-enum MuscleGroup { chest, shoulders, triceps, lowerBody, core, fullBody }
-
-class Exercise {
-  final String id;
-  final String name;
-  final String nameEn;           // für GitHub-Internationalisierung V2
-  final ExerciseType type;
-  final List<MuscleGroup> focus;
-  final String executionHint;    // Ausführungshinweis (Formkorrektheit)
-  final String? safetyHint;      // Gelenkschutz (nur bei plyometrisch)
-  final bool isPlyometric;
-  final String? imageAssetPath;  // P6.5 Illustration
-}
-
-// Übungsdatenbank – alle 6 Übungen:
-const List<Exercise> kExercises = [
-  Exercise(
-    id: 'pushup',
-    name: 'Liegestütze',
-    nameEn: 'Push-Up',
-    type: ExerciseType.strength,
-    focus: [MuscleGroup.chest, MuscleGroup.shoulders, MuscleGroup.triceps],
-    executionHint: 'Brust senkt sich bis ca. 5 cm über den Boden. '
-        'Körper bleibt gerade – keine Hüfte nach oben oder unten.',
-    safetyHint: null,
-    isPlyometric: false,
-  ),
-  Exercise(
-    id: 'squat',
-    name: 'Kniebeugen',
-    nameEn: 'Squat',
-    type: ExerciseType.strength,
-    focus: [MuscleGroup.lowerBody, MuscleGroup.core],
-    executionHint: 'Knie zeigen in Zehenrichtung. Fersen bleiben auf dem Boden. '
-        'Oberkörper aufrecht, Blick geradeaus.',
-    safetyHint: null,
-    isPlyometric: false,
-  ),
-  Exercise(
-    id: 'lunge',
-    name: 'Ausfallschritte',
-    nameEn: 'Lunges',
-    type: ExerciseType.strength,
-    focus: [MuscleGroup.lowerBody, MuscleGroup.core],
-    executionHint: 'Vorderes Knie nicht über die Zehenspitze. '
-        'Hinteres Knie sinkt kontrolliert Richtung Boden.',
-    safetyHint: null,
-    isPlyometric: false,
-  ),
-  Exercise(
-    id: 'mountain_climber',
-    name: 'Mountain Climbers',
-    nameEn: 'Mountain Climbers',
-    type: ExerciseType.metabolic,
-    focus: [MuscleGroup.core, MuscleGroup.fullBody],
-    executionHint: 'Hüfte bleibt auf Plank-Höhe – nicht nach oben oder unten wandern. '
-        'Knie zieht aktiv zur Brust.',
-    safetyHint: null,
-    isPlyometric: false,
-  ),
-  Exercise(
-    id: 'jumping_jack',
-    name: 'Hampelmänner',
-    nameEn: 'Jumping Jacks',
-    type: ExerciseType.metabolic,
-    focus: [MuscleGroup.fullBody],
-    executionHint: 'Kontrollierte Bewegung – Arme aktiv nach oben führen.',
-    safetyHint: 'Weiche Landung: Knie leicht gebeugt beim Aufkommen. '
-        'Nicht auf den Fersen landen.',
-    isPlyometric: true,
-  ),
-  Exercise(
-    id: 'burpee',
-    name: 'Burpees / Sprungkniebeugen',
-    nameEn: 'Burpees / Jump Squats',
-    type: ExerciseType.hiit,
-    focus: [MuscleGroup.fullBody, MuscleGroup.core],
-    executionHint: 'Beim Burpee: Plank-Position korrekt halten, '
-        'kein Hohlkreuz. Sprung aus der vollen Hocke.',
-    safetyHint: 'Weiche Landung: Auf dem Vorfuß landen, '
-        'Knie beim Aufkommen leicht beugen. Gelenke schonen.',
-    isPlyometric: true,
-  ),
-];
-```
-
-### 4.2 Trainingsstruktur: 3-Wochen-Plan
-
-**Wochenstruktur (alle 3 Wochen identisch in der Abfolge, steigend in Intensität):**
-
-```
-Mo  → Kraft-Tag A
-Di  → HIIT-Tag
-Mi  → Kraft-Tag B
-Do  → Regeneration (Stretching / Tai Chi / Ruhe)
-Fr  → Kraft-Tag A (Wiederholung mit Steigerung)
-Sa  → HIIT-Tag
-So  → Regeneration
-```
-
-**Kraft-Tag A (Brust / Schultern / Beine):**
-
-| Woche | Übung | Sätze | Wiederholungen | Pause |
-|---|---|---|---|---|
-| 1 | Liegestütze | 3 | 12 | 60 Sek. |
-| 1 | Kniebeugen | 3 | 15 | 60 Sek. |
-| 1 | Ausfallschritte | 3 | 10 je Bein | 60 Sek. |
-| 2 | Liegestütze | 3 | 13 | 60 Sek. |
-| 2 | Kniebeugen | 3 | 17 | 60 Sek. |
-| 2 | Ausfallschritte | 3 | 11 je Bein | 60 Sek. |
-| 3 | Liegestütze | 3 | 15 | 45 Sek. |
-| 3 | Kniebeugen | 3 | 20 | 45 Sek. |
-| 3 | Ausfallschritte | 3 | 12 je Bein | 45 Sek. |
-
-**Kraft-Tag B (Metabolisch / Core-Fokus):**
-
-| Woche | Übung | Sätze | Wiederholungen | Pause |
-|---|---|---|---|---|
-| 1–3 | Mountain Climbers | 3 | 20 je Seite | 45 Sek. |
-| 1–3 | Hampelmänner | 3 | 30 | 45 Sek. |
-| 1–3 | Kniebeugen | 3 | 15–20 | 60 Sek. |
-
-**HIIT-Tag (Intervall-Logik – Chronos-Timer):**
-
-```
-Übungsfolge (4 Runden, kein Equipment):
-  Runde 1–4:
-    30 Sek. Mountain Climbers    [WORK]
-    20 Sek. Pause                [REST]
-    30 Sek. Hampelmänner         [WORK]
-    20 Sek. Pause                [REST]
-    30 Sek. Burpees/Sprungknieb. [WORK]
-    30 Sek. Pause zwischen Runden [TRANSITION]
-
-Woche 1: 4 Runden
-Woche 2: 5 Runden
-Woche 3: 6 Runden
-```
-
-**Regenerations-Tag:**
-Kein Timer, keine Übungen. Empfehlung: Stretching oder Tai-Chi-Sequenz (Text-Info, kein Video-Linking).
-
-### 4.3 Datenmodell (Hive)
-
-```dart
-// lib/data/models/workout_session.dart
-// @HiveType für lokale Persistenz
-
-@HiveType(typeId: 0)
-class WorkoutSession extends HiveObject {
-  @HiveField(0) late String workoutId;       // Referenz auf Training-Tag-ID
-  @HiveField(1) late DateTime completedAt;   // Abschlusszeitpunkt
-  @HiveField(2) late int durationSeconds;    // Gesamtdauer in Sekunden
-  @HiveField(3) late bool completed;         // Vollständig oder abgebrochen
-  @HiveField(4) late int week;               // 1, 2 oder 3
-  @HiveField(5) late int dayOfWeek;          // 1–7
-}
-
-// Keine personenbezogenen Felder. Keine Nutzer-ID. Keine Gerätekennungen.
-```
+**Layout:**
+- Max. Content-Breite auf Web/Tablet: 480px.
+- Chronos-Timer: Kreisförmiger Countdown-Ring (ca. 65% Breite).
+- Keine externen Fonts (System-Fonts verwenden zwecks Offline-Fähigkeit).
 
 ---
 
-## 5. Chronos-Timer – vollständige Logik
+## 5. Coding-Regeln
 
-### 5.1 Timer-Zustände
-
-```dart
-// lib/data/models/timer_state.dart
-
-enum TimerPhase { idle, work, rest, transition, completed }
-
-class TimerState {
-  final TimerPhase phase;
-  final int remainingSeconds;     // Countdown
-  final int currentRound;         // Aktuelle Runde (HIIT)
-  final int totalRounds;          // Gesamtrunden
-  final int currentSetIndex;      // Aktueller Satz (Kraft)
-  final int totalSets;
-  final Exercise? currentExercise;
-  final Exercise? nextExercise;   // Vorschau nächste Übung
-  final bool isRunning;
-}
-```
-
-### 5.2 Timer-Konstanten
-
-```dart
-// lib/core/constants/app_durations.dart
-
-const kHiitWorkSeconds     = 30;   // Belastungsphase
-const kHiitRestSeconds     = 20;   // Pause zwischen Intervallen
-const kHiitTransSeconds    = 30;   // Pause zwischen Runden
-const kStrengthRestSeconds = 60;   // Satzpause Kraft (Woche 1–2)
-const kStrengthRestWeek3   = 45;   // Satzpause Kraft (Woche 3)
-const kTransitionSeconds   = 5;    // Übungswechsel-Vorbereitungszeit
-```
-
-### 5.3 Akustische Signale
-
-| Ereignis | Sound-Datei | Verhalten |
-|---|---|---|
-| Work beginnt | `beep_work.mp3` | Einzelner kurzer Ton |
-| Rest beginnt | `beep_rest.mp3` | Zwei kurze Töne |
-| Transition | `beep_transition.mp3` | Drei kurze Töne |
-| Letzten 3 Sek. | `beep_work.mp3` (3×) | Countdown-Ticks |
-| Training fertig | Alle drei kurz | Abschluss-Signal |
+- **Null-Safety**: Konsequent nutzen.
+- **State**: Kein `setState` für komplexe Logik (→ Riverpod).
+- **Einheitlichkeit**: Keine hardcodierten Farben/Strings/Durations in Widgets (→ Konstanten nutzen).
+- **Dateigröße**: Komponenten max. 150 Zeilen, sonst aufteilen.
+- **Verantwortlichkeit**: Jede Datei hat genau eine Aufgabe (Single Responsibility).
+- **Audio**: Immer in `try-catch` Blöcke fassen.
 
 ---
 
-## 6. Features (V1 – MVP)
+## 6. Datenschutz
 
-### 6.1 Home-Screen
-
-```
-[Heutiger Trainingstag]          ← Woche X / Tag Y
-  Typ: HIIT / Kraft A / Kraft B / Regeneration
-  Übungsvorschau (kompakt)
-  [Training starten] Button
-
-[Wochenfortschritt]              ← 5 Tage, abgehakt wenn absolviert
-  Mo ✓  Di ✓  Mi –  Do –  Fr –
-
-[Zum vollständigen Plan]         ← Link zu Plan-Übersicht
-```
-
-### 6.2 Plan-Übersicht (21 Tage)
-
-- Alle 21 Tage als Liste
-- Status: offen / absolviert / heute
-- Antippen → Detailansicht des Tages
-
-### 6.3 Workout-Screen (Kern der App)
-
-**Kraft-Modus (satzbasiert):**
-```
-Übungsname + Muskelgruppe
-Satz X von 3 | Wiederholungen: 12–15
-[Satz absolviert] Button
-Pause-Timer läuft herunter (60 Sek.)
-Nächste Übung (Vorschau)
-Gelenkschutz-Hinweis wenn plyometrisch
-```
-
-**HIIT-Modus (zeitbasiert):**
-```
-Großer Countdown-Ring (Chronos)
-Phase-Badge: WORK / REST / TRANSITION
-Aktuelle Übung + Ausführungshinweis
-Runde X von 4/5/6
-Nächste Übung (Vorschau)
-[Pause] [Abbrechen] Buttons
-```
-
-### 6.4 Übungsbibliothek
-
-- Alle 6 Übungen als Karten
-- Antippen → Detailansicht mit Ausführungshinweis
-- Gelenkschutz-Hinweis bei plyometrischen Übungen (farblich hervorgehoben)
-
-### 6.5 Historie (lokal)
-
-- Liste aller absolvierten Einheiten
-- Datum, Typ, Dauer, vollständig/abgebrochen
-- Nur auf dem Gerät gespeichert – kein Sync
-
-### 6.6 Regenerations-Tag-Screen
-
-- Kein Timer
-- Text: Empfehlungen für Stretching / Tai Chi
-- Optional: Einfache Atemübung als Text-Anleitung
+- **Privacy by Design**: Keine Erhebung personenbezogener Daten.
+- **Kein Tracking**: Keine Telemetrie oder Analytics.
+- **Lokal**: Alle Daten verbleiben auf dem Gerät.
 
 ---
 
-## 7. UI-Design-Regeln
+## 7. Weiterentwicklung (V2-Roadmap)
 
-**Farbschema (Dark-Mode-First):**
+Zukünftige Erweiterungen sollten folgende Punkte beachten:
+- Internationalisierung vorbereitet (DE/EN).
+- Optionale Cloud-Sync (nur verschlüsselt, nur Opt-in).
+- Adaptives Training (Nutzer-Feedback einbeziehen).
 
-```dart
-// lib/core/constants/app_colors.dart
-
-const kColorBackground    = Color(0xFF0D1117);  // Fast Schwarz (GitHub Dark)
-const kColorSurface       = Color(0xFF161B22);  // Karten-Hintergrund
-const kColorWork          = Color(0xFF238636);  // Grün – Belastungsphase
-const kColorRest          = Color(0xFF1F6FEB);  // Blau – Ruhephase
-const kColorTransition    = Color(0xFFE3B341);  // Gelb – Übergang
-const kColorAccent        = Color(0xFFF78166);  // Rot-Orange – Akzent, CTA
-const kColorText          = Color(0xFFE6EDF3);  // Heller Text
-const kColorTextMuted     = Color(0xFF8B949E);  // Gedämpfter Text
-const kColorSafetyHint    = Color(0xFFFF7B72);  // Gelenkschutz-Hinweis
-```
-
-**Layout-Regeln:**
-- Kein BottomNavigationBar mit mehr als 4 Items
-- WorkoutScreen: Vollbild, kein AppBar während Timer läuft
-- Chronos-Timer: kreisförmiger Countdown-Ring, Durchmesser = 65% der Bildschirmbreite
-- Kein Material-You / kein Cupertino-Design – eigenes minimales Design
-- Schrift: System-Font (kein Google Fonts Dependency für Offline-Fähigkeit)
-- Padding: 16px Standard, 24px bei Haupt-Content-Bereichen
-
-**Responsive (Web + Mobil):**
-- Mobil: Single-Column, alles scrollbar
-- Web/Tablet ab 768px: zentrierter Content-Container max. 480px Breite
+*Details zur Historie und den initialen Build-Phasen finden sich in `DEV_LOG.md`.*
 
 ---
-
-## 8. API-Routen / Navigation (GoRouter)
-
-```dart
-// Keine REST-API – rein lokale App
-
-// GoRouter-Routen:
-/                          ← Home (heutiger Tag)
-/plan                      ← 3-Wochen-Übersicht
-/plan/:dayId               ← Detail eines Trainingstags
-/workout/:dayId            ← Aktive Trainingseinheit
-/workout/:dayId/complete   ← Abschluss-Screen
-/exercises                 ← Übungsbibliothek
-/exercises/:exerciseId     ← Übungsdetail
-/history                   ← Trainingshistorie
-```
-
----
-
-## 9. Keine Prompt-Templates (keine KI-API)
-
-Diese App verwendet keine LLM-Anbindung.
-Alle Inhalte (Trainingsplan, Übungshinweise, Texte) sind als Dart-Konstanten
-in `lib/data/workout_plan.dart` hinterlegt und benötigen keine externe API.
-
----
-
-## 10. Datenschutz
-
-**Kein DSGVO-Stack erforderlich.**
-
-```
-- Keine personenbezogenen Daten werden erhoben
-- Keine Nutzerkonten, keine E-Mails, keine Namen
-- Keine externen APIs, kein Netzwerkverkehr im Betrieb
-- Lokale Trainingshistorie verbleibt ausschließlich auf dem Gerät (Hive)
-- Keine Gerätekennungen, kein Fingerprinting, kein Analytics
-- Open Source: vollständiger Code einsehbar auf GitHub (MIT-Lizenz)
-```
-
-**Privacy-Hinweis für README und App Stores:**
-> "Precision Fitness & Flow collects no personal data. No account required.
-> All training history is stored locally on your device only. No internet
-> connection needed after installation."
-
----
-
-## 11. GitHub-Konfiguration
-
-**Repository-Struktur:**
-```
-Repository:  precision-fitness-flow (public)
-Lizenz:      MIT
-README:      Englisch (Haupt) + Deutsch (README.de.md)
-Branch:      main (stable) + develop (aktive Entwicklung)
-```
-
-**GitHub Actions – `.github/workflows/build.yml`:**
-```yaml
-name: Build & Test
-
-on: [push, pull_request]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: 'stable'
-      - run: flutter pub get
-      - run: flutter analyze
-      - run: flutter test
-
-  build_web:
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-      - run: flutter pub get
-      - run: flutter build web --release
-      - uses: actions/upload-artifact@v4
-        with:
-          name: web-build
-          path: build/web/
-```
-
-**GitHub Actions – `.github/workflows/deploy_web.yml`:**
-```yaml
-name: Deploy to GitHub Pages
-
-on:
-  push:
-    branches: [main]
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-      - run: flutter pub get
-      - run: flutter build web --release --base-href "/precision-fitness-flow/"
-      - uses: actions/deploy-pages@v4
-        with:
-          path: build/web/
-```
-
----
-
-## 12. Coding-Regeln
-
-- Dart mit null-safety – keine `!` ohne Begründung im Kommentar
-- Keine `setState` in Workout-Logik – ausschließlich Riverpod StateNotifier
-- Timer-Service als eigener Riverpod-Provider – kein direkter Timer in Widgets
-- Audio-Service: immer try-catch, kein App-Crash bei fehlendem Audio
-- Hive-Adapters generieren mit `build_runner` – kein manuelles Schreiben
-- Keine hardcodierten Farben in Widgets – nur aus `app_colors.dart`
-- Keine hardcodierten Durations – nur aus `app_durations.dart`
-- Keine hardcodierten Strings in Widgets – nur aus `workout_plan.dart` oder Konstanten
-- Komponenten maximal 150 Zeilen – bei mehr: aufteilen
-- Jede Datei hat genau eine Verantwortlichkeit
-- Tests für: timer_service, workout_plan-Logik, week_calculator
-
----
-
-## 13. Starter-Reihenfolge für Cursor / Claude Code
-
-**Phase 1 – Fundament**
-1. `pubspec.yaml` mit allen Dependencies
-2. `lib/core/constants/` – Farben, Durations
-3. `lib/data/models/` – alle Dart-Klassen (Exercise, WorkoutSession, TimerState)
-4. `lib/data/workout_plan.dart` – vollständiger 3-Wochen-Plan als Dart-Konstante
-5. Hive-Adapter generieren (`build_runner`)
-
-**Phase 2 – Timer-Service (Chronos)**
-6. `lib/core/services/timer_service.dart` – Timer-Logik (work/rest/transition)
-7. `lib/core/services/audio_service.dart` – Sound-Signale
-8. Unit-Tests: `timer_service_test.dart`
-9. Manuelle Überprüfung: Timer-Sequenz 30/20 läuft korrekt durch
-
-**Phase 3 – Navigation + App-Shell**
-10. `lib/app.dart` – GoRouter + Theme
-11. `lib/main.dart` – Hive-Init + Riverpod-Scope
-12. Leere Placeholder-Pages für alle Routen
-13. Test: App startet, Navigation funktioniert im Browser und Emulator
-
-**Phase 4 – Home + Plan**
-14. `home_page.dart` + `home_controller.dart`
-15. `plan_overview_page.dart` + `day_detail_page.dart`
-16. `week_progress_bar.dart`
-17. Test: Heutiger Tag wird korrekt angezeigt, Plan-Übersicht zeigt alle 21 Tage
-
-**Phase 5 – Workout-Screen (Kernfeature)**
-18. `chronos_timer_widget.dart` – kreisförmiger Countdown-Ring
-19. `hiit_view.dart` – Timer-gesteuerter HIIT-Ablauf
-20. `strength_view.dart` – satzbasierter Kraft-Ablauf
-21. `workout_controller.dart` – verbindet Timer-Service mit UI
-22. `safety_hint_banner.dart` – Gelenkschutz-Hinweis
-23. `workout_complete_page.dart` – Abschluss + Hive-Speicherung
-24. Test: Vollständige HIIT-Einheit (4 Runden) läuft fehlerfrei durch
-
-**Phase 6 – Übungsbibliothek + Historie (Abgeschlossen)**
-25. `exercise_list_page.dart` + `exercise_detail_page.dart`
-26. `history_page.dart` – Hive-Abfrage
-27. `history_service.dart` + `history_repository.dart`
-28. Test: Session wird gespeichert, in Historie angezeigt, persistiert nach Neustart
-
-**Phase 6.5 – Übungs-Illustrationen (Abgeschlossen)**
-- 6 minimalistische Illustrationen generiert und in `assets/images/` eingebunden.
-- Model `Exercise` um `imageAssetPath` erweitert.
-- Bilder in `ExerciseListPage`, `ExerciseDetailPage`, `HiitView` und `StrengthView` integriert.
-
-**Phase 7 – Web-Build + GitHub (Abgeschlossen)**
-29. Web-Build testen: `flutter build web --release`
-30. GitHub Actions konfigurieren (build.yml + deploy_web.yml)
-31. README.md schreiben (EN + DE)
-32. GitHub Pages testen: App läuft im Browser ohne lokalen Server
-
----
-
-## 14. Cursor-Starter-Prompt
-
-```
-Lies zuerst vollständig die CLAUDE.md in diesem Verzeichnis.
-Stelle keine Fragen – alle Entscheidungen sind dort getroffen.
-
-Phase 1 (Projektstruktur, Datenmodell, Hive-Adapter) ist abgeschlossen.
-Nächster Schritt: Phase 2 (Chronos-Timer).
-
-Hinweis: Die Web-App ist nach Phase 1 noch nicht lauffähig. Erst ab Phase 3 (App-Shell, Navigation, UI) kann sie im Browser gestartet werden.
-```
-
----
-
-## 15. SaaS-Vorbereitung (nicht implementieren, aber beachten)
-
-```
-- Übungsplan-Daten als JSON-Datei auslagern → leicht austauschbar für V2 (Multilingual)
-- Trainingsplan-Logik von UI trennen → V2 kann eigene Pläne unterstützen
-- Audio-Service abstrakt halten → V2 kann Text-to-Speech-Cues ergänzen
-- History-Repository abstrakt halten → V2 kann optionales Cloud-Sync ergänzen
-  (nur wenn Nutzer aktiv zustimmt – Privacy by Default bleibt erhalten)
-```
-
----
-
-*Precision Fitness & Flow – CLAUDE.md v1.0 – Q2 2026*
-*Open Source: MIT-Lizenz | GitHub: precision-fitness-flow*
-*V2-Roadmap: Eigene Pläne, Multilingual (EN/DE), optionaler iCloud/Drive-Sync (Opt-In)*
+*Precision Fitness & Flow – CLAUDE.md v1.1 – Q1 2026*
