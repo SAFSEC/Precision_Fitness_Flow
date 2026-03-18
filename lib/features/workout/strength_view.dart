@@ -121,26 +121,37 @@ class StrengthView extends ConsumerWidget {
             child: const Text('Pause überspringen'),
           )
         else
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: kColorAccent,
-              foregroundColor: kColorText,
-              minimumSize: const Size(double.infinity, 56),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-            ),
-            onPressed: () {
-               // Assuming 3 sets * exercise length sets total
-               final totalSets = trainingDay.exercises.length * 3;
-               final isLastSet = timerState.currentSetIndex == totalSets;
-               
-               if (isLastSet) {
-                 workoutController.cancelWorkout(); // Finishes workout
-               } else {
-                 final restDuration = trainingDay.week == 3 ? kStrengthRestWeek3 : kStrengthRestSeconds;
-                 workoutController.startStrengthRest(restDuration, timerState.currentSetIndex + 1, totalSets);
-               }
-            },
-            child: const Text('Satz absolviert', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Text(
+                'Führe die Übung ohne Zeitdruck aus.\nKlicke hier, wenn du fertig bist.',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: kColorTextMuted, fontSize: 12),
+              ),
+              const SizedBox(height: 8),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: kColorAccent,
+                  foregroundColor: kColorText,
+                  minimumSize: const Size(double.infinity, 56),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+                onPressed: () {
+                   // Assuming 3 sets * exercise length sets total
+                   final totalSets = trainingDay.exercises.length * 3;
+                   final isLastSet = timerState.currentSetIndex == totalSets;
+                   
+                   if (isLastSet) {
+                     workoutController.cancelWorkout(); // Finishes workout
+                   } else {
+                     final restDuration = trainingDay.week == 3 ? kStrengthRestWeek3 : kStrengthRestSeconds;
+                     workoutController.startStrengthRest(restDuration, timerState.currentSetIndex + 1, totalSets);
+                   }
+                },
+                child: const Text('Satz abgeschlossen – Pause starten', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              ),
+            ],
           ),
           
         const SizedBox(height: 24),

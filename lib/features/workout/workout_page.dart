@@ -22,17 +22,9 @@ class _WorkoutPageState extends ConsumerState<WorkoutPage> {
   @override
   void initState() {
     super.initState();
-    // Parse dayId (e.g., '1-2' for Week 1, Day 2)
-    final parts = widget.dayId.split('-');
-    int week = 1;
-    int dayOfWeek = 1;
-    if (parts.length == 2) {
-      week = int.tryParse(parts[0]) ?? 1;
-      dayOfWeek = int.tryParse(parts[1]) ?? 1;
-    }
-
+    
     _trainingDay = kWorkoutPlan.firstWhere(
-      (day) => day.week == week && day.dayOfWeek == dayOfWeek,
+      (day) => day.id == widget.dayId,
       orElse: () => kWorkoutPlan.first,
     );
 
