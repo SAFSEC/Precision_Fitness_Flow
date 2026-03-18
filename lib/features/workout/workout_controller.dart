@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/services/timer_service.dart';
 import '../../data/models/training_day.dart';
-import '../../data/models/workout_session.dart';
 
 // Provides the active workout controller
 final workoutControllerProvider = StateNotifierProvider.family<WorkoutController, bool, TrainingDay>((ref, trainingDay) {
