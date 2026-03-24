@@ -12,6 +12,7 @@ Eine vollständig offline lauffähige, datenschutzfreundliche Bodyweight-Trainin
 ## ✨ Kernfunktionen
 - **Progressiver 3-Wochen-Plan**: Strukturierte Workouts, die dein Training systematisch aufbauen.
 - **Chronos-Timer**: Ein präziser Countdown-Ring, der dir exakt visualisiert, wann geboostet und wann pausiert wird.
+- **Dynamisches Trainings-Erlebnis**: Sprachansagen als virtueller Coach (TTS), haptisches Vibrations-Feedback bei Pausen-/Übungswechsel und automatischer Wakelock, damit das Display an bleibt.
 - **Absoluter Datenschutz**: Es werden keinerlei persönliche Daten gesammelt. Deine Trainings-Historie bleibt ohne Umwege rein auf deinem Endgerät.
 - **6 Kernübungen**: Geführt mit minimalistischen Vector-Illustrationen (Liegestütze, Kniebeugen, Ausfallschritte, Mountain Climbers, Hampelmänner, Burpees).
 - **Integrierter Gelenkschutz**: Direkte Warnhinweise insbesondere bei plyometrischen (sprungbasierten) Übungen.

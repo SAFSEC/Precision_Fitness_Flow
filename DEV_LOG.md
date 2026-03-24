@@ -4,11 +4,11 @@ Dieses Dokument archiviert die abgeschlossenen Entwicklungsphasen und den Prozes
 
 ---
 
-## Entwicklungsstand (V1.0 abgeschlossen)
+## Entwicklungsstand (V1.0 + Phase 8 abgeschlossen)
 ```
 Stand: Q2 2026
-Abgeschlossene Phasen: 1, 2, 3, 4, 5, 6, 6.5, 7
-Offene Phasen: Keine (V1 fertiggestellt)
+Abgeschlossene Phasen: 1, 2, 3, 4, 5, 6, 6.5, 7, 8
+Offene Phasen: 9, 10, 11 (V2 Roadmap)
 ```
 
 ---
@@ -66,6 +66,11 @@ Offene Phasen: Keine (V1 fertiggestellt)
 31. README.md schreiben (EN + DE)
 32. GitHub Pages testen: App läuft im Browser ohne lokalen Server
 
+**Phase 8 – UX Polish & "Lebendigkeit"**
+33. Wakelock Integration (`wakelock_plus`) im WorkoutController.
+34. Haptisches Feedback (`vibration`) via neuem HapticService.
+35. Voice Cues (`flutter_tts`) via neuem VoiceService, integriert in TimerService.
+
 ---
 
 ## 2. Historischer Starter-Prompt (Cursor / Claude Code)
@@ -83,4 +88,4 @@ Hinweis: Die Web-App ist nach Phase 1 noch nicht lauffähig. Erst ab Phase 3 (Ap
 ```
 
 ---
-*Archiviert am 18. März 2026*
+*V1 archiviert am 18. März 2026. Phase 8 (V2 Start) abgeschlossen im März 2026.*

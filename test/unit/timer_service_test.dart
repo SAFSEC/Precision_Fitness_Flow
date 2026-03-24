@@ -2,16 +2,22 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'package:precision_fitness_flow/core/services/audio_service.dart';
+import 'package:precision_fitness_flow/core/services/haptic_service.dart';
+import 'package:precision_fitness_flow/core/services/voice_service.dart';
 import 'package:precision_fitness_flow/core/services/timer_service.dart';
 import 'package:precision_fitness_flow/data/models/exercise.dart';
 import 'package:precision_fitness_flow/data/models/timer_state.dart';
 import 'package:precision_fitness_flow/core/constants/app_durations.dart';
 
 class MockAudioService extends Mock implements AudioService {}
+class MockHapticService extends Mock implements HapticService {}
+class MockVoiceService extends Mock implements VoiceService {}
 
 void main() {
   late TimerService timerService;
   late MockAudioService mockAudioService;
+  late MockHapticService mockHapticService;
+  late MockVoiceService mockVoiceService;
 
   final testExercises = [
     const Exercise(
@@ -36,14 +42,19 @@ void main() {
 
   setUp(() {
     mockAudioService = MockAudioService();
+    mockHapticService = MockHapticService();
+    mockVoiceService = MockVoiceService();
 
     when(() => mockAudioService.playWork()).thenAnswer((_) async {});
     when(() => mockAudioService.playRest()).thenAnswer((_) async {});
     when(() => mockAudioService.playTransition()).thenAnswer((_) async {});
     when(() => mockAudioService.playTick()).thenAnswer((_) async {});
     when(() => mockAudioService.playComplete()).thenAnswer((_) async {});
+    
+    when(() => mockHapticService.vibrate()).thenAnswer((_) async {});
+    when(() => mockVoiceService.speak(any())).thenAnswer((_) async {});
 
-    timerService = TimerService(mockAudioService);
+    timerService = TimerService(mockAudioService, mockHapticService, mockVoiceService);
   });
 
   tearDown(() {

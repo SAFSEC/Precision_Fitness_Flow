@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 import '../../core/services/timer_service.dart';
 import '../../data/models/training_day.dart';
 
@@ -15,7 +16,14 @@ class WorkoutController extends StateNotifier<bool> {
 
   WorkoutController(this._timerService, this._trainingDay) : super(false);
 
+  @override
+  void dispose() {
+    WakelockPlus.disable();
+    super.dispose();
+  }
+
   void startWorkout() {
+    WakelockPlus.enable();
     if (_trainingDay.type == 'hiit') {
       // Logic for HIIT: usually 4 rounds in week 1, 5 in week 2, 6 in week 3
       int rounds = 4;
@@ -31,19 +39,23 @@ class WorkoutController extends StateNotifier<bool> {
   }
 
   void pauseWorkout() {
+    WakelockPlus.disable();
     _timerService.pause();
   }
 
   void resumeWorkout() {
+    WakelockPlus.enable();
     _timerService.resume();
   }
 
   void cancelWorkout() {
+    WakelockPlus.disable();
     _timerService.cancel();
     state = true; // Mark as finished/cancelled to navigate away
   }
   
   void startStrengthRest(int restSeconds, int currentSet, int totalSets) {
+    WakelockPlus.enable();
     _timerService.startStrengthRest(restSeconds, currentSet, totalSets);
   }
 
