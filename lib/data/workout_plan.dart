@@ -306,7 +306,6 @@ final kProgram3Weeks = WorkoutProgram(
 // Unified list of all programs
 final kAllPrograms = [
   kProgramHybrid,
-  kProgram3Weeks,
 ];
 
 final kExercises = [
