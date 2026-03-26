@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../data/workout_plan.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/constants/app_colors.dart';
+import '../../core/providers/active_program_provider.dart';
 
-class DayDetailPage extends StatelessWidget {
+class DayDetailPage extends ConsumerWidget {
   final String dayId;
   const DayDetailPage({super.key, required this.dayId});
 
   @override
-  Widget build(BuildContext context) {
-    // Find day from all 21 days
-    final plan = kWorkoutPlan;
-    final day = plan.firstWhere(
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Find day from the active program
+    final activeProgram = ref.watch(activeProgramProvider);
+    final day = activeProgram.days.firstWhere(
       (d) => d.id == dayId,
-      orElse: () => plan.first,
+      orElse: () => activeProgram.days.first,
     );
 
     final isRestDay = day.type == 'rest';
@@ -62,7 +63,8 @@ class DayDetailPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              ...day.exercises.map((exercise) {
+              ...day.steps.map((step) {
+                final exercise = step.exercise;
                 return Card(
                   color: kColorSurface,
                   margin: const EdgeInsets.only(bottom: 12),

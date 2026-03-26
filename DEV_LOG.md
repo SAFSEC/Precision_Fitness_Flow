@@ -7,8 +7,8 @@ Dieses Dokument archiviert die abgeschlossenen Entwicklungsphasen und den Prozes
 ## Entwicklungsstand (V1.0 + Phase 8 abgeschlossen)
 ```
 Stand: Q2 2026
-Abgeschlossene Phasen: 1, 2, 3, 4, 5, 6, 6.5, 7, 8
-Offene Phasen: 9, 10, 11 (V2 Roadmap)
+Abgeschlossene Phasen: 1, 2, 3, 4, 5, 6, 6.5, 7, 8, 9
+Offene Phasen: 10 (Motivation), 11 (Smarte Steuerung), 12 (V2 Roadmap)
 ```
 
 ---
@@ -71,6 +71,13 @@ Offene Phasen: 9, 10, 11 (V2 Roadmap)
 34. Haptisches Feedback (`vibration`) via neuem HapticService.
 35. Voice Cues (`flutter_tts`) via neuem VoiceService, integriert in TimerService.
 
+**Phase 9 & 9.1 – Multi-Plan Architektur & Hybrid Focus**
+36. Datenmodelle `WorkoutStep` (mit Metadaten) und `WorkoutProgram` implementiert.
+37. UI (StrengthView, Timer) refactored, um metadatengesteuert zu arbeiten.
+38. Mehrere Pläne (Home-Auswahl via Bottom-Sheet) mit lokaler Hive-Persistenz aktiviert.
+39. Starren 3-Wochen-Plan durch einen rotierenden 7-Tage **Hybrid-Plan (A/B Optionen)** ersetzt.
+40. Tests, UI-Gruppierung und WeekCalculator Logik angepasst, damit User sich täglich zwischen "Precision Flow" und "Military Task" entscheiden können.
+
 ---
 
 ## 2. Historischer Starter-Prompt (Cursor / Claude Code)
@@ -81,10 +88,9 @@ Beim Start der Entwicklung von V1 wurde folgender Prompt verwendet:
 Lies zuerst vollständig die CLAUDE.md in diesem Verzeichnis.
 Stelle keine Fragen – alle Entscheidungen sind dort getroffen.
 
-Phase 1 (Projektstruktur, Datenmodell, Hive-Adapter) ist abgeschlossen.
-Nächster Schritt: Phase 2 (Chronos-Timer).
-
-Hinweis: Die Web-App ist nach Phase 1 noch nicht lauffähig. Erst ab Phase 3 (App-Shell, Navigation, UI) kann sie im Browser gestartet werden.
+Phase 1-9 sind abgeschlossen.
+Nächster Schritt: Phase 10 (Motivation & Progress Tracking).
+Startpunkt für die nächste Sitzung: Erstelle Konzepte für Heatmap und Streak-System in Erweiterung.md.
 ```
 
 ---

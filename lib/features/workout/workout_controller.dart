@@ -30,7 +30,7 @@ class WorkoutController extends StateNotifier<bool> {
       if (_trainingDay.week == 2) rounds = 5;
       if (_trainingDay.week == 3) rounds = 6;
       
-      _timerService.startHiit(_trainingDay.exercises, rounds);
+      _timerService.startHiit(_trainingDay.steps, rounds);
     } else {
       // Logic for Strength: Start with idle/first exercise
       // No active timer to start immediately for strength, it's set-based

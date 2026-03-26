@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/constants/app_colors.dart';
-import '../../data/workout_plan.dart';
 import '../../data/models/training_day.dart';
+import '../../core/providers/active_program_provider.dart';
 import 'hiit_view.dart';
 import 'strength_view.dart';
 import 'workout_controller.dart';
@@ -23,9 +23,11 @@ class _WorkoutPageState extends ConsumerState<WorkoutPage> {
   void initState() {
     super.initState();
     
-    _trainingDay = kWorkoutPlan.firstWhere(
+    final activeProgram = ref.read(activeProgramProvider);
+    
+    _trainingDay = activeProgram.days.firstWhere(
       (day) => day.id == widget.dayId,
-      orElse: () => kWorkoutPlan.first,
+      orElse: () => activeProgram.days.first,
     );
 
     // Auto-start workout safely after build phase

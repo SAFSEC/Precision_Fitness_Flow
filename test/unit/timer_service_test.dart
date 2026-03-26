@@ -7,6 +7,7 @@ import 'package:precision_fitness_flow/core/services/voice_service.dart';
 import 'package:precision_fitness_flow/core/services/timer_service.dart';
 import 'package:precision_fitness_flow/data/models/exercise.dart';
 import 'package:precision_fitness_flow/data/models/timer_state.dart';
+import 'package:precision_fitness_flow/data/models/workout_step.dart';
 import 'package:precision_fitness_flow/core/constants/app_durations.dart';
 
 class MockAudioService extends Mock implements AudioService {}
@@ -19,26 +20,34 @@ void main() {
   late MockHapticService mockHapticService;
   late MockVoiceService mockVoiceService;
 
-  final testExercises = [
-    const Exercise(
-      id: 'e1',
-      name: 'Exercise 1',
-      nameEn: 'E1',
-      type: ExerciseType.hiit,
-      focus: [],
-      executionHint: '',
-      isPlyometric: false,
-    ),
-    const Exercise(
-      id: 'e2',
-      name: 'Exercise 2',
-      nameEn: 'E2',
-      type: ExerciseType.hiit,
-      focus: [],
-      executionHint: '',
-      isPlyometric: false,
-    ),
-  ];
+    final testSteps = [
+      WorkoutStep(
+        durationSeconds: 30,
+        restSeconds: 20,
+        exercise: const Exercise(
+          id: 'e1',
+          name: 'Exercise 1',
+          nameEn: 'E1',
+          type: ExerciseType.hiit,
+          focus: [],
+          executionHint: '',
+          isPlyometric: false,
+        ),
+      ),
+      WorkoutStep(
+        durationSeconds: 30,
+        restSeconds: 20,
+        exercise: const Exercise(
+          id: 'e2',
+          name: 'Exercise 2',
+          nameEn: 'E2',
+          type: ExerciseType.hiit,
+          focus: [],
+          executionHint: '',
+          isPlyometric: false,
+        ),
+      ),
+    ];
 
   setUp(() {
     mockAudioService = MockAudioService();
@@ -67,7 +76,7 @@ void main() {
   });
 
   test('HIIT timer sequence (Work -> Rest -> Work -> Clean Transition/Complete)', () {
-    timerService.startHiit(testExercises, 2); // 2 rounds
+    timerService.startHiit(testSteps, 2); // 2 rounds
     
     // Initial phase is Transition
     expect(timerService.state.phase, TimerPhase.transition);

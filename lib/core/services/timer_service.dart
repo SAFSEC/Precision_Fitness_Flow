@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/models/timer_state.dart';
 import '../../data/models/exercise.dart';
+import '../../data/models/workout_step.dart';
 import '../constants/app_durations.dart';
 import 'audio_service.dart';
 import 'haptic_service.dart';
@@ -20,7 +21,7 @@ class TimerService extends StateNotifier<TimerState> {
   final VoiceService _voiceService;
   Timer? _timer;
   
-  List<Exercise> _exercises = [];
+  List<WorkoutStep> _steps = [];
   int _currentExerciseIndex = 0;
   bool _isHiit = true;
 
@@ -41,9 +42,9 @@ class TimerService extends StateNotifier<TimerState> {
     super.dispose();
   }
 
-  void startHiit(List<Exercise> exercises, int totalRounds) {
+  void startHiit(List<WorkoutStep> steps, int totalRounds) {
     _timer?.cancel();
-    _exercises = exercises;
+    _steps = steps;
     _currentExerciseIndex = 0;
     _isHiit = true;
     
@@ -55,12 +56,14 @@ class TimerService extends StateNotifier<TimerState> {
       currentSetIndex: 1,
       totalSets: 1,
       currentExercise: null,
-      nextExercise: _exercises.isNotEmpty ? _exercises[0] : null,
+      nextExercise: _steps.isNotEmpty ? _steps[0].exercise : null,
       isRunning: true,
     );
     
     _audioService.playTransition();
-    _voiceService.speak("Training startet. ${_exercises[0].name}");
+    if (_steps.isNotEmpty) {
+      _voiceService.speak("Training startet. ${_steps[0].exercise.name}");
+    }
     _startTimer();
   }
 
@@ -146,6 +149,8 @@ class TimerService extends StateNotifier<TimerState> {
       return;
     }
 
+    if (_steps.isEmpty) return; // Fail safe
+
     // HIIT Logic
     switch (state.phase) {
       case TimerPhase.transition: // Transition -> Work
@@ -153,13 +158,13 @@ class TimerService extends StateNotifier<TimerState> {
         _audioService.playWork();
         state = state.copyWith(
           phase: TimerPhase.work,
-          remainingSeconds: kHiitWorkSeconds,
-          currentExercise: _exercises[_currentExerciseIndex],
-          nextExercise: _currentExerciseIndex < _exercises.length - 1 ? _exercises[_currentExerciseIndex + 1] : (_exercises.isNotEmpty ? _exercises[0] : null),
+          remainingSeconds: _steps[_currentExerciseIndex].durationSeconds ?? kHiitWorkSeconds,
+          currentExercise: _steps[_currentExerciseIndex].exercise,
+          nextExercise: _currentExerciseIndex < _steps.length - 1 ? _steps[_currentExerciseIndex + 1].exercise : _steps[0].exercise,
         );
         break;
       case TimerPhase.work: // Work -> Rest or Sequence Transition or Complete
-        bool isLastExerciseInRound = _currentExerciseIndex == _exercises.length - 1;
+        bool isLastExerciseInRound = _currentExerciseIndex == _steps.length - 1;
         bool isLastRound = state.currentRound == state.totalRounds;
 
         if (isLastExerciseInRound && isLastRound) {
@@ -177,26 +182,26 @@ class TimerService extends StateNotifier<TimerState> {
           // Runde beendet -> Transition
           _hapticService.vibrate();
           _audioService.playTransition();
-          _voiceService.speak("Runde beendet. Nächste Übung: ${_exercises[0].name}");
+          _voiceService.speak("Runde beendet. Nächste Übung: ${_steps[0].exercise.name}");
           _currentExerciseIndex = 0; 
           state = state.copyWith(
             phase: TimerPhase.transition,
             remainingSeconds: kHiitTransSeconds, 
             currentRound: state.currentRound + 1,
             clearCurrentExercise: true, 
-            nextExercise: _exercises[0],
+            nextExercise: _steps[0].exercise,
           );
         } else {
           // Nächste Übung -> Rest
           _hapticService.vibrate();
           _audioService.playRest();
-          _voiceService.speak("Pause. Nächste Übung: ${_exercises[_currentExerciseIndex + 1].name}");
+          _voiceService.speak("Pause. Nächste Übung: ${_steps[_currentExerciseIndex + 1].exercise.name}");
           _currentExerciseIndex++;
           state = state.copyWith(
             phase: TimerPhase.rest,
-            remainingSeconds: kHiitRestSeconds,
+            remainingSeconds: _steps[_currentExerciseIndex - 1].restSeconds ?? kHiitRestSeconds,
             clearCurrentExercise: true, 
-            nextExercise: _exercises[_currentExerciseIndex],
+            nextExercise: _steps[_currentExerciseIndex].exercise,
           );
         }
         break;
@@ -205,9 +210,9 @@ class TimerService extends StateNotifier<TimerState> {
         _audioService.playWork();
         state = state.copyWith(
           phase: TimerPhase.work,
-          remainingSeconds: kHiitWorkSeconds,
-          currentExercise: _exercises[_currentExerciseIndex],
-          nextExercise: _currentExerciseIndex < _exercises.length - 1 ? _exercises[_currentExerciseIndex + 1] : (_exercises.isNotEmpty ? _exercises[0] : null),
+          remainingSeconds: _steps[_currentExerciseIndex].durationSeconds ?? kHiitWorkSeconds,
+          currentExercise: _steps[_currentExerciseIndex].exercise,
+          nextExercise: _currentExerciseIndex < _steps.length - 1 ? _steps[_currentExerciseIndex + 1].exercise : _steps[0].exercise,
         );
         break;
       case TimerPhase.idle:

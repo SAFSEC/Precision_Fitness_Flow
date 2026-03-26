@@ -21,7 +21,7 @@ void main() {
     when(() => mockAudioService.playTick()).thenAnswer((_) async {});
     when(() => mockAudioService.playComplete()).thenAnswer((_) async {});
 
-    final hiitDay = kWorkoutPlan.firstWhere((day) => day.type == 'hiit');
+    final hiitDay = kProgramHybrid.days.firstWhere((day) => day.type == 'hiit');
     
     await tester.pumpWidget(
       ProviderScope(
@@ -56,7 +56,7 @@ void main() {
     container.read(workoutControllerProvider(hiitDay).notifier).skipPhase();
     await tester.pump();
     
-    expect(find.text(hiitDay.exercises[0].name), findsWidgets);
+    expect(find.text(hiitDay.steps[0].exercise.name), findsWidgets);
     expect(find.text('WORK'), findsOneWidget); 
 
     // Add teardown to clear screen size

@@ -13,6 +13,7 @@ void main() async {
   
   // Open necessary boxes, e.g., 'history'
   await Hive.openBox<WorkoutSession>('history');
+  await Hive.openBox<String>('settings');
 
   runApp(
     const ProviderScope(

@@ -18,9 +18,7 @@ class StrengthView extends ConsumerWidget {
     final timerState = ref.watch(timerServiceProvider);
     final workoutController = ref.read(workoutControllerProvider(trainingDay).notifier);
 
-    // Initial state handling or Rest state
     if (timerState.phase == TimerPhase.idle || timerState.phase == TimerPhase.rest) {
-      // In strength training, the active phase is un-timed (user doing reps).
       return _buildActiveStrengthSet(context, timerState, workoutController);
     } 
 
@@ -28,18 +26,47 @@ class StrengthView extends ConsumerWidget {
   }
 
   Widget _buildActiveStrengthSet(BuildContext context, TimerState timerState, WorkoutController workoutController) {
-    final currentExerciseIndex = (timerState.currentSetIndex - 1) ~/ 3; // Integer division: assuming 3 sets per exercise based on PRD plan.
-    if (currentExerciseIndex >= trainingDay.exercises.length) {
-       // Completed all exercises
+    if (trainingDay.steps.isEmpty) {
+        return const Center(
+          child: Text('Keine Übungen an diesem Tag!', style: TextStyle(color: kColorTextMuted, fontSize: 18)),
+        );
+    }
+
+    final steps = trainingDay.steps;
+    int currentStepIndex = 0;
+    int currentSetInStep = 1;
+    int totalSets = 0;
+    
+    // Calculate global total sets
+    for (var step in steps) totalSets += (step.sets ?? 3);
+
+    // Calculate which step and which set we are currently on based on global currentSetIndex
+    int setsPassed = 0;
+    for (int i = 0; i < steps.length; i++) {
+      int setsForThisStep = steps[i].sets ?? 3;
+      if (timerState.currentSetIndex <= setsPassed + setsForThisStep) {
+        currentStepIndex = i;
+        currentSetInStep = timerState.currentSetIndex - setsPassed;
+        break;
+      }
+      setsPassed += setsForThisStep;
+    }
+
+    if (timerState.currentSetIndex > totalSets) {
        return const Center(
           child: Text('Training abgeschlossen!', style: TextStyle(color: kColorText, fontSize: 24)),
        );
     }
     
-    final currentExercise = trainingDay.exercises[currentExerciseIndex];
-    final currentSetInExercise = ((timerState.currentSetIndex - 1) % 3) + 1;
-
+    final currentStep = steps[currentStepIndex];
+    final currentExercise = currentStep.exercise;
     final isResting = timerState.phase == TimerPhase.rest;
+    
+    // Metadata display strings
+    final setsStr = currentStep.sets ?? 3;
+    final repsStr = currentStep.reps != null ? "${currentStep.reps} Wiederholungen" : "";
+    final durationStr = currentStep.durationSeconds != null ? "${currentStep.durationSeconds} Sekunden halten" : "";
+    final metadataDisplay = [repsStr, durationStr].where((s) => s.isNotEmpty).join(' | ');
 
     return Column(
       children: [
@@ -69,7 +96,15 @@ class StrengthView extends ConsumerWidget {
           style: const TextStyle(color: kColorTextMuted, fontWeight: FontWeight.bold),
         ),
 
-        const SizedBox(height: 32),
+        const SizedBox(height: 24),
+        
+        if (metadataDisplay.isNotEmpty)
+           Text(
+             metadataDisplay,
+             style: const TextStyle(fontSize: 18, color: kColorAccent, fontWeight: FontWeight.bold),
+           ),
+
+        const SizedBox(height: 16),
         
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
@@ -79,7 +114,7 @@ class StrengthView extends ConsumerWidget {
             border: Border.all(color: kColorRest, width: 2),
           ),
           child: Text(
-            'Satz $currentSetInExercise von 3',
+            'Satz $currentSetInStep von $setsStr',
             style: const TextStyle(fontSize: 20, color: kColorText),
           ),
         ),
@@ -94,7 +129,6 @@ class StrengthView extends ConsumerWidget {
             style: const TextStyle(fontSize: 64, fontWeight: FontWeight.bold, color: kColorRest),
           ),
         ] else ...[
-          // Show execution hints when active
           Text(
             currentExercise.executionHint,
             style: const TextStyle(fontSize: 16, color: kColorTextMuted),
@@ -124,10 +158,12 @@ class StrengthView extends ConsumerWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Text(
-                'Führe die Übung ohne Zeitdruck aus.\nKlicke hier, wenn du fertig bist.',
+              Text(
+                currentStep.durationSeconds != null 
+                    ? 'Halte die Übung für ${currentStep.durationSeconds} Sekunden.'
+                    : 'Führe die Übung sauber aus.\nKlicke hier, wenn du fertig bist.',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: kColorTextMuted, fontSize: 12),
+                style: const TextStyle(color: kColorTextMuted, fontSize: 12),
               ),
               const SizedBox(height: 8),
               ElevatedButton(
@@ -138,18 +174,17 @@ class StrengthView extends ConsumerWidget {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
                 onPressed: () {
-                   // Assuming 3 sets * exercise length sets total
-                   final totalSets = trainingDay.exercises.length * 3;
                    final isLastSet = timerState.currentSetIndex == totalSets;
                    
                    if (isLastSet) {
-                     workoutController.cancelWorkout(); // Finishes workout
+                     workoutController.cancelWorkout();
                    } else {
-                     final restDuration = trainingDay.week == 3 ? kStrengthRestWeek3 : kStrengthRestSeconds;
+                     final defaultRest = trainingDay.week == 3 ? kStrengthRestWeek3 : kStrengthRestSeconds;
+                     final restDuration = currentStep.restSeconds ?? defaultRest;
                      workoutController.startStrengthRest(restDuration, timerState.currentSetIndex + 1, totalSets);
                    }
                 },
-                child: const Text('Satz abgeschlossen – Pause starten', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                child: const Text('Satz abgeschlossen – Pause starten', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               ),
             ],
           ),

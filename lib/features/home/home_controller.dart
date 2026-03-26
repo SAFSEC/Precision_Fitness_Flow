@@ -3,9 +3,13 @@ import '../../data/models/training_day.dart';
 import '../../core/utils/week_calculator.dart';
 import '../../core/services/history_service.dart';
 
+import '../../core/providers/active_program_provider.dart';
+import '../../data/models/workout_program.dart';
+
 final homeControllerProvider = StateNotifierProvider<HomeController, HomeState>((ref) {
   final historyRepo = ref.watch(historyRepositoryProvider);
-  return HomeController(historyRepo);
+  final activeProgram = ref.watch(activeProgramProvider);
+  return HomeController(historyRepo, activeProgram);
 });
 
 class HomeState {
@@ -34,15 +38,16 @@ class HomeState {
 
 class HomeController extends StateNotifier<HomeState> {
   final _historyRepo;
+  final WorkoutProgram _activeProgram;
 
-  HomeController(this._historyRepo) : super(_initialState(_historyRepo)) {
+  HomeController(this._historyRepo, this._activeProgram) : super(_initialState(_historyRepo, _activeProgram)) {
     // Falls sich im Hintergrund etwas an der History ändert,
     // könnten wir hier Listener anhängen oder eine refresh-Methode anbieten.
   }
 
-  static HomeState _initialState(historyRepo) {
+  static HomeState _initialState(historyRepo, WorkoutProgram program) {
     final completedIds = historyRepo.getCompletedWorkoutIds();
-    final activeDay = WeekCalculator.getNextActiveDay(completedIds);
+    final activeDay = WeekCalculator.getNextActiveDay(completedIds, program);
     return HomeState(
       activeDay: activeDay,
       completedIds: completedIds,
@@ -52,7 +57,7 @@ class HomeController extends StateNotifier<HomeState> {
 
   void refreshData() {
     final completedIds = _historyRepo.getCompletedWorkoutIds();
-    final activeDay = WeekCalculator.getNextActiveDay(completedIds);
+    final activeDay = WeekCalculator.getNextActiveDay(completedIds, _activeProgram);
     state = state.copyWith(
       activeDay: activeDay,
       completedIds: completedIds,
