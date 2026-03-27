@@ -14,7 +14,7 @@ A fully offline, privacy-first, zero-equipment bodyweight training app built wit
 - **Advanced Chronos Timer**: An intuitive, visually engaging timer guiding you exactly when to push and when to rest.
 - **Dynamic Training Experience**: Voice coach announcements (TTS), haptic vibration feedback, and wakelock integration for a seamless hands-free workout flow.
 - **Zero Privacy Concerns**: No data collection, no forms, no tracking, and no external APIs. All your workout history stays strictly on your local device.
-- **6 Core Exercises**: Push-Ups, Squats, Lunges, Mountain Climbers, Jumping Jacks, and Burpees—complete with minimalist visual form guides.
+- **12 Core Exercises**: Push-Ups, Squats, Lunges, Mountain Climbers, Burpees, Glute Bridges, Plank, Wall Sit, Pull-Ups, Sprint/High Knees, Long Run, and Stretching—each with minimalist visual form guides.
 - **Adaptive Execution Guides**: Specific joint-safety warnings (especially for plyometric exercises) to prevent injuries.
 
 ## 🛠 Tech Stack

@@ -12,7 +12,7 @@ class ActiveProgramNotifier extends StateNotifier<WorkoutProgram> {
     final savedId = box.get('active_program_id');
     return kAllPrograms.firstWhere(
       (p) => p.id == savedId,
-      orElse: () => kProgram3Weeks,
+      orElse: () => kProgramHybrid,
     );
   }
 

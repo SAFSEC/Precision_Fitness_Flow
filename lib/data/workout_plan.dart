@@ -12,6 +12,7 @@ const pushUps = Exercise(
   focus: [MuscleGroup.chest, MuscleGroup.core, MuscleGroup.shoulders],
   executionHint: 'Rumpf gespannt halten',
   isPlyometric: false,
+  imageAssetPath: 'assets/images/pushup.png',
 );
 
 const lunges = Exercise(
@@ -22,6 +23,7 @@ const lunges = Exercise(
   focus: [MuscleGroup.lowerBody, MuscleGroup.core],
   executionHint: 'Oberkörper aufrecht, Knie nicht über die Zehen',
   isPlyometric: false,
+  imageAssetPath: 'assets/images/lunge.png',
 );
 
 const gluteBridges = Exercise(
@@ -32,6 +34,7 @@ const gluteBridges = Exercise(
   focus: [MuscleGroup.lowerBody, MuscleGroup.core],
   executionHint: 'Hüfte strecken und Po anspannen',
   isPlyometric: false,
+  imageAssetPath: 'assets/images/glute_bridges.png',
 );
 
 const burpees = Exercise(
@@ -43,6 +46,7 @@ const burpees = Exercise(
   executionHint: 'Maximales Tempo, saubere Form',
   isPlyometric: true,
   safetyHint: 'Achte bei der Landung auf deine Kniegelenke!',
+  imageAssetPath: 'assets/images/burpee.png',
 );
 
 const mountainClimbers = Exercise(
@@ -53,6 +57,7 @@ const mountainClimbers = Exercise(
   focus: [MuscleGroup.core, MuscleGroup.shoulders],
   executionHint: 'Knie schnell zur Brust ziehen',
   isPlyometric: true,
+  imageAssetPath: 'assets/images/mountain_climber.png',
 );
 
 const plank = Exercise(
@@ -63,6 +68,7 @@ const plank = Exercise(
   focus: [MuscleGroup.core],
   executionHint: 'Körper bildet eine gerade Linie',
   isPlyometric: false,
+  imageAssetPath: 'assets/images/plank.png',
 );
 
 const wallSit = Exercise(
@@ -73,6 +79,7 @@ const wallSit = Exercise(
   focus: [MuscleGroup.lowerBody],
   executionHint: 'Beine im 90 Grad Winkel',
   isPlyometric: false,
+  imageAssetPath: 'assets/images/wall_sit.png',
 );
 
 const sprint = Exercise(
@@ -83,6 +90,7 @@ const sprint = Exercise(
   focus: [MuscleGroup.lowerBody, MuscleGroup.fullBody],
   executionHint: 'Maximale Geschwindigkeit',
   isPlyometric: true,
+  imageAssetPath: 'assets/images/sprint.png',
 );
 
 const pullUps = Exercise(
@@ -93,6 +101,7 @@ const pullUps = Exercise(
   focus: [MuscleGroup.shoulders, MuscleGroup.triceps],
   executionHint: 'Kinn über die Stange',
   isPlyometric: false,
+  imageAssetPath: 'assets/images/pull_ups.png',
 );
 
 const squats = Exercise(
@@ -103,16 +112,18 @@ const squats = Exercise(
   focus: [MuscleGroup.lowerBody],
   executionHint: 'Rücken gerade halten',
   isPlyometric: false,
+  imageAssetPath: 'assets/images/squat.png',
 );
 
 const longRun = Exercise(
   id: 'long_run',
   name: 'Langsamer Dauerlauf / Marsch',
   nameEn: 'Long Run',
-  type: ExerciseType.metabolic, 
+  type: ExerciseType.metabolic,
   focus: [MuscleGroup.lowerBody],
   executionHint: 'Konstantes, ruhiges Tempo',
   isPlyometric: false,
+  imageAssetPath: 'assets/images/long_run.png',
 );
 
 const stretching = Exercise(
@@ -123,6 +134,7 @@ const stretching = Exercise(
   focus: [MuscleGroup.fullBody],
   executionHint: 'Entspannt atmen',
   isPlyometric: false,
+  imageAssetPath: 'assets/images/stretching.png',
 );
 
 

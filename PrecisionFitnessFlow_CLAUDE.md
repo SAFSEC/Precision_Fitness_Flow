@@ -9,12 +9,19 @@ Stelle keine Fragen – alle Entscheidungen sind hier getroffen.
 
 ## Entwicklungsstand
 ```
-Stand: Q2 2026
-Abgeschlossene Phasen: 1, 2, 3, 4, 5, 6, 6.5, 7, 8, 9, 9.1
+Stand: 27. März 2026
+Abgeschlossene Phasen: 1, 2, 3, 4, 5, 6, 6.5, 7, 8, 9, 9.1, 9.2 (Bugfixes)
 Offene Phasen: 10, 11, 12
 Bekannte Probleme: –
 Nächster Schritt: Phase 10 – Motivation & Progress Tracking
 Privacy-Stack: nicht aktiv (keine personenbezogenen Daten)
+
+Bugfixes (Phase 9.2):
+- active_program_provider: Fallback auf kProgramHybrid statt kProgram3Weeks
+- workout_page: type == 'strength' zur StrengthView-Bedingung ergänzt
+- plan_overview_page: Routing /plan/day/{id} → /plan/{id} korrigiert
+- workout_plan: imageAssetPath für alle 12 Übungen eingetragen
+- assets/images: 7 neue Illustrationen via dart:ui Generator hinzugefügt
 ```
 
 

@@ -48,7 +48,7 @@ class _WorkoutPageState extends ConsumerState<WorkoutPage> {
     Widget activeView;
     if (_trainingDay.type == 'hiit') {
       activeView = HiitView(trainingDay: _trainingDay);
-    } else if (_trainingDay.type == 'strengthA' || _trainingDay.type == 'strengthB') {
+    } else if (_trainingDay.type == 'strength' || _trainingDay.type == 'strengthA' || _trainingDay.type == 'strengthB') {
       activeView = StrengthView(trainingDay: _trainingDay);
     } else {
       // Rest day: Shouldn't conventionally reach WorkoutPage, but graceful fallback

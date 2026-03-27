@@ -4,10 +4,10 @@ Dieses Dokument archiviert die abgeschlossenen Entwicklungsphasen und den Prozes
 
 ---
 
-## Entwicklungsstand (V1.0 + Phase 8 abgeschlossen)
+## Entwicklungsstand (V1.0 + Bugfix-Session abgeschlossen)
 ```
-Stand: Q2 2026
-Abgeschlossene Phasen: 1, 2, 3, 4, 5, 6, 6.5, 7, 8, 9
+Stand: 27. März 2026
+Abgeschlossene Phasen: 1, 2, 3, 4, 5, 6, 6.5, 7, 8, 9, 9.1, 9.2 (Bugfixes)
 Offene Phasen: 10 (Motivation), 11 (Smarte Steuerung), 12 (V2 Roadmap)
 ```
 
@@ -77,6 +77,13 @@ Offene Phasen: 10 (Motivation), 11 (Smarte Steuerung), 12 (V2 Roadmap)
 38. Mehrere Pläne (Home-Auswahl via Bottom-Sheet) mit lokaler Hive-Persistenz aktiviert.
 39. Starren 3-Wochen-Plan durch einen rotierenden 7-Tage **Hybrid-Plan (A/B Optionen)** ersetzt.
 40. Tests, UI-Gruppierung und WeekCalculator Logik angepasst, damit User sich täglich zwischen "Precision Flow" und "Military Task" entscheiden können.
+
+**Phase 9.2 – Bugfix-Session (27. März 2026)**
+41. **Bug:** `active_program_provider.dart` fiel auf `kProgram3Weeks` (Legacy-Stub mit leeren `steps`) zurück statt auf `kProgramHybrid` → Fallback korrigiert.
+42. **Bug:** `workout_page.dart` prüfte nur `type == 'strengthA'/'strengthB'`, nicht `type == 'strength'` → Kraft-Tage des Hybrid-Plans zeigten "Regeneration"-View statt Übungen → Bedingung ergänzt.
+43. **Bug:** `plan_overview_page.dart` navigierte zu `/plan/day/${id}` statt `/plan/${id}` → Routing-Fehler beim Öffnen eines Tages aus der Planübersicht → URL-Pfad korrigiert.
+44. **Feature:** `imageAssetPath` für alle 5 vorhandenen Übungen (Liegestütze, Ausfallschritte, Burpees, Mountain Climbers, Kniebeugen) in `workout_plan.dart` nachgetragen – fehlten nach Phase 9 Refactoring.
+45. **Feature:** 7 neue minimalistische Übungsillustration per Flutter-`dart:ui`-Generator-Script erzeugt und eingebunden: `glute_bridges`, `plank`, `wall_sit`, `sprint`, `pull_ups`, `long_run`, `stretching`. Generator-Script liegt in `test/generate_exercise_images_test.dart`.
 
 ---
 

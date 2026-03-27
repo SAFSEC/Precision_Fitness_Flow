@@ -104,7 +104,7 @@ class PlanOverviewPage extends ConsumerWidget {
                           child: ListTile(
                             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                             onTap: () {
-                              context.push('/plan/day/${day.id}');
+                              context.push('/plan/${day.id}');
                             },
                             leading: CircleAvatar(
                               backgroundColor: iconColor.withOpacity(0.2),
