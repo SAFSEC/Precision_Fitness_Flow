@@ -10,11 +10,12 @@ A fully offline, privacy-first, zero-equipment bodyweight training app built wit
 **Precision Fitness & Flow** guides you through a flexible Hybrid Weekly workout plan (Precision Flow & Military Task) consisting of targeted strength intervals and intense HIIT (High-Intensity Interval Training) flows. It features a stunning, distraction-free Chronos-Timer and relies on absolutely zero external dependencies, user accounts, or internet connections after the initial download.
 
 ## ✨ Key Features
-- **Hybrid Weekly Plan**: Choose between Precision Flow (technique) and Military Task (performance) daily based on your form.
+- **5-Day Muscle & HIIT Plan**: A structured weekly schedule featuring 3x Strength and 2x HIIT sessions, with weekend recovery.
+- **Hybrid Weekly Plan**: Seamlessly choose between Precision Flow (base) and Military Task (performance) daily, with 3 distinct HIIT options.
 - **Advanced Chronos Timer**: An intuitive, visually engaging timer guiding you exactly when to push and when to rest.
 - **Dynamic Training Experience**: Voice coach announcements (TTS), haptic vibration feedback, and wakelock integration for a seamless hands-free workout flow.
 - **Zero Privacy Concerns**: No data collection, no forms, no tracking, and no external APIs. All your workout history stays strictly on your local device.
-- **12 Core Exercises**: Push-Ups, Squats, Lunges, Mountain Climbers, Burpees, Glute Bridges, Plank, Wall Sit, Pull-Ups, Sprint/High Knees, Long Run, and Stretching—each with minimalist visual form guides.
+- **18 Core Exercises & Variants**: Guided with high-quality, premium illustrations (including Diamond Push-Ups, Jumping Squats, Pulsing Squats, Walking Lunges, etc.).
 - **Adaptive Execution Guides**: Specific joint-safety warnings (especially for plyometric exercises) to prevent injuries.
 
 ## 🛠 Tech Stack

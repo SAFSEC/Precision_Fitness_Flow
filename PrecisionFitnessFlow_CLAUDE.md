@@ -9,19 +9,18 @@ Stelle keine Fragen – alle Entscheidungen sind hier getroffen.
 
 ## Entwicklungsstand
 ```
-Stand: 27. März 2026
-Abgeschlossene Phasen: 1, 2, 3, 4, 5, 6, 6.5, 7, 8, 9, 9.1, 9.2 (Bugfixes)
+Stand: 28. März 2026
+Abgeschlossene Phasen: 1, 2, 3, 4, 5, 6, 6.5, 7, 8, 9, 9.1, 9.2, 9.3 (5-Tage-Plan)
 Offene Phasen: 10, 11, 12
 Bekannte Probleme: –
 Nächster Schritt: Phase 10 – Motivation & Progress Tracking
 Privacy-Stack: nicht aktiv (keine personenbezogenen Daten)
 
-Bugfixes (Phase 9.2):
-- active_program_provider: Fallback auf kProgramHybrid statt kProgram3Weeks
-- workout_page: type == 'strength' zur StrengthView-Bedingung ergänzt
-- plan_overview_page: Routing /plan/day/{id} → /plan/{id} korrigiert
-- workout_plan: imageAssetPath für alle 12 Übungen eingetragen
-- assets/images: 7 neue Illustrationen via dart:ui Generator hinzugefügt
+Neuerungen (Phase 9.3):
+- 5-Tage-Trainingsplan: Umstellung auf 3x Kraft, 2x HIIT, 2x Regeneration.
+- Premium Assets: 6 neue hochqualitative Illustrationen für Übungsvarianten.
+- Neue Übungen: Diamant-Liegestütze, Schräge Liegestütze, Sprungkniebeugen, Puls-Kniebeugen, Gehende Ausfallschritte, Hampelmänner.
+- HIIT-Struktur: 3 wählbare Optionen (A, B, C) für maximale Flexibilität.
 ```
 
 
@@ -187,7 +186,7 @@ precision_fitness_flow/
 
 ## 4. Trainingsplan – vollständige Datenstruktur
 
-### 4.1 Übungsdatenbank (6 Kernübungen)
+### 4.1 Übungsdatenbank (Erweitert)
 
 ```dart
 // lib/data/models/exercise.dart
@@ -195,144 +194,37 @@ precision_fitness_flow/
 enum ExerciseType { strength, metabolic, hiit }
 enum MuscleGroup { chest, shoulders, triceps, lowerBody, core, fullBody }
 
-class Exercise {
-  final String id;
-  final String name;
-  final String nameEn;           // für GitHub-Internationalisierung V2
-  final ExerciseType type;
-  final List<MuscleGroup> focus;
-  final String executionHint;    // Ausführungshinweis (Formkorrektheit)
-  final String? safetyHint;      // Gelenkschutz (nur bei plyometrisch)
-  final bool isPlyometric;
-}
-
-// Übungsdatenbank – alle 6 Übungen:
-const List<Exercise> kExercises = [
-  Exercise(
-    id: 'pushup',
-    name: 'Liegestütze',
-    nameEn: 'Push-Up',
-    type: ExerciseType.strength,
-    focus: [MuscleGroup.chest, MuscleGroup.shoulders, MuscleGroup.triceps],
-    executionHint: 'Brust senkt sich bis ca. 5 cm über den Boden. '
-        'Körper bleibt gerade – keine Hüfte nach oben oder unten.',
-    safetyHint: null,
-    isPlyometric: false,
-  ),
-  Exercise(
-    id: 'squat',
-    name: 'Kniebeugen',
-    nameEn: 'Squat',
-    type: ExerciseType.strength,
-    focus: [MuscleGroup.lowerBody, MuscleGroup.core],
-    executionHint: 'Knie zeigen in Zehenrichtung. Fersen bleiben auf dem Boden. '
-        'Oberkörper aufrecht, Blick geradeaus.',
-    safetyHint: null,
-    isPlyometric: false,
-  ),
-  Exercise(
-    id: 'lunge',
-    name: 'Ausfallschritte',
-    nameEn: 'Lunges',
-    type: ExerciseType.strength,
-    focus: [MuscleGroup.lowerBody, MuscleGroup.core],
-    executionHint: 'Vorderes Knie nicht über die Zehenspitze. '
-        'Hinteres Knie sinkt kontrolliert Richtung Boden.',
-    safetyHint: null,
-    isPlyometric: false,
-  ),
-  Exercise(
-    id: 'mountain_climber',
-    name: 'Mountain Climbers',
-    nameEn: 'Mountain Climbers',
-    type: ExerciseType.metabolic,
-    focus: [MuscleGroup.core, MuscleGroup.fullBody],
-    executionHint: 'Hüfte bleibt auf Plank-Höhe – nicht nach oben oder unten wandern. '
-        'Knie zieht aktiv zur Brust.',
-    safetyHint: null,
-    isPlyometric: false,
-  ),
-  Exercise(
-    id: 'jumping_jack',
-    name: 'Hampelmänner',
-    nameEn: 'Jumping Jacks',
-    type: ExerciseType.metabolic,
-    focus: [MuscleGroup.fullBody],
-    executionHint: 'Kontrollierte Bewegung – Arme aktiv nach oben führen.',
-    safetyHint: 'Weiche Landung: Knie leicht gebeugt beim Aufkommen. '
-        'Nicht auf den Fersen landen.',
-    isPlyometric: true,
-  ),
-  Exercise(
-    id: 'burpee',
-    name: 'Burpees / Sprungkniebeugen',
-    nameEn: 'Burpees / Jump Squats',
-    type: ExerciseType.hiit,
-    focus: [MuscleGroup.fullBody, MuscleGroup.core],
-    executionHint: 'Beim Burpee: Plank-Position korrekt halten, '
-        'kein Hohlkreuz. Sprung aus der vollen Hocke.',
-    safetyHint: 'Weiche Landung: Auf dem Vorfuß landen, '
-        'Knie beim Aufkommen leicht beugen. Gelenke schonen.',
-    isPlyometric: true,
-  ),
-];
+// Auszug der Kernübungen + Varianten:
+const pushUps        = Exercise(id: 'push_ups', name: 'Liegestütze (Basis)', ...);
+const inclinePushUps = Exercise(id: 'push_ups_incline', name: 'Schräge Liegestütze', ...);
+const diamondPushUps = Exercise(id: 'push_ups_diamond', name: 'Diamant-Liegestütze', ...);
+const squats         = Exercise(id: 'squats', name: 'Kniebeugen', ...);
+const jumpingSquats  = Exercise(id: 'squats_jumping', name: 'Sprungkniebeugen', ...);
+const pulsingSquats  = Exercise(id: 'squats_pulsing', name: 'Puls-Kniebeugen', ...);
+const lunges         = Exercise(id: 'lunges', name: 'Ausfallschritte', ...);
+const walkingLunges  = Exercise(id: 'lunges_walking', name: 'Gehende Ausfallschritte', ...);
+const burpees        = Exercise(id: 'burpees', name: 'Burpees', ...);
+const jumpingJacks   = Exercise(id: 'jumping_jacks', name: 'Hampelmänner', ...);
 ```
 
-### 4.2 Trainingsstruktur: 3-Wochen-Plan
+### 4.2 Trainingsstruktur: 5-Tage-Hybrid-Plan
 
-**Wochenstruktur (alle 3 Wochen identisch in der Abfolge, steigend in Intensität):**
+**Wochenstruktur (3x Kraft, 2x HIIT, 2x Regeneration):**
 
 ```
-Mo  → Kraft-Tag A
-Di  → HIIT-Tag
-Mi  → Kraft-Tag B
-Do  → Regeneration (Stretching / Tai Chi / Ruhe)
-Fr  → Kraft-Tag A (Wiederholung mit Steigerung)
-Sa  → HIIT-Tag
+Mo  → Krafttraining (Option A: Basis / Option B: Advanced)
+Di  → HIIT (3 Optionen: A, B oder C wählbar)
+Mi  → Krafttraining (Option A: Fokus / Option B: Muskelreiz)
+Do  → HIIT (3 Optionen: A, B oder C wählbar)
+Fr  → Krafttraining (Option A: Ausführung / Option B: Belastung)
+Sa  → Regeneration (Stretching / Ruhe)
 So  → Regeneration
 ```
 
-**Kraft-Tag A (Brust / Schultern / Beine):**
-
-| Woche | Übung | Sätze | Wiederholungen | Pause |
-|---|---|---|---|---|
-| 1 | Liegestütze | 3 | 12 | 60 Sek. |
-| 1 | Kniebeugen | 3 | 15 | 60 Sek. |
-| 1 | Ausfallschritte | 3 | 10 je Bein | 60 Sek. |
-| 2 | Liegestütze | 3 | 13 | 60 Sek. |
-| 2 | Kniebeugen | 3 | 17 | 60 Sek. |
-| 2 | Ausfallschritte | 3 | 11 je Bein | 60 Sek. |
-| 3 | Liegestütze | 3 | 15 | 45 Sek. |
-| 3 | Kniebeugen | 3 | 20 | 45 Sek. |
-| 3 | Ausfallschritte | 3 | 12 je Bein | 45 Sek. |
-
-**Kraft-Tag B (Metabolisch / Core-Fokus):**
-
-| Woche | Übung | Sätze | Wiederholungen | Pause |
-|---|---|---|---|---|
-| 1–3 | Mountain Climbers | 3 | 20 je Seite | 45 Sek. |
-| 1–3 | Hampelmänner | 3 | 30 | 45 Sek. |
-| 1–3 | Kniebeugen | 3 | 15–20 | 60 Sek. |
-
-**HIIT-Tag (Intervall-Logik – Chronos-Timer):**
-
-```
-Übungsfolge (4 Runden, kein Equipment):
-  Runde 1–4:
-    30 Sek. Mountain Climbers    [WORK]
-    20 Sek. Pause                [REST]
-    30 Sek. Hampelmänner         [WORK]
-    20 Sek. Pause                [REST]
-    30 Sek. Burpees/Sprungknieb. [WORK]
-    30 Sek. Pause zwischen Runden [TRANSITION]
-
-Woche 1: 4 Runden
-Woche 2: 5 Runden
-Woche 3: 6 Runden
-```
-
-**Regenerations-Tag:**
-Kein Timer, keine Übungen. Empfehlung: Stretching oder Tai-Chi-Sequenz (Text-Info, kein Video-Linking).
+**HIIT-Logik (Dienstag / Donnerstag):**
+- **Option A (PFF - Core & Endurance)**: 4 Runden, 30s Work / 20s Rest.
+- **Option B (MT - Power)**: 5 Runden, 30s Burpees / 20s Jumping Squats, 10s Rest.
+- **Option C (Elite - Intensity Booster)**: 4 Runden, 3x 30s Work (Diamond/Pulse/Lunge), 15s Rest.
 
 ### 4.3 Datenmodell (Hive)
 
@@ -635,14 +527,13 @@ jobs:
 34. Haptisches Feedback (`vibration`) via neuem HapticService.
 35. Voice Cues (`flutter_tts`) via neuem VoiceService, integriert in TimerService.
 
-**Phase 9 & 9.1 – Multi-Plan Architektur & Hybrid Focus**
-36. Datenmodelle `WorkoutStep` und `WorkoutProgram` ersetzen statische Listen.
-37. UI und Timer nutzen dynamisch Halte-Dauern und Pausensekunden aus dem Modell.
-38. Mehrere Pläne, umschaltbar auf Home-Page inkl. Hive-Speicherung.
-39. Umbau des starren 3-Wochen-Plans in einen 7-Tage-Rotations-Hybridplan.
+**Phase 9.3 – 5-Tage Muskelaufbau & HIIT**
+40. Umstellung des Hybrid-Plans auf ein 5-Tage-Schema (Mo-Fr) + Wochenende Fokus.
+41. Integration von 6 neuen premium visual Assets für Übungsvarianten.
+42. Erweiterung der HIIT-Logik auf 3 wählbare Optionen pro HIIT-Tag.
 
 **Phase 10 – Motivation & Progress Tracking (In Vorbereitung)**
-40. Konzepte für Heatmap und Streak-System entwerfen.
+43. Konzepte für Heatmap und Streak-System entwerfen.
 
 ---
 

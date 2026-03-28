@@ -10,11 +10,12 @@ Eine vollständig offline lauffähige, datenschutzfreundliche Bodyweight-Trainin
 **Precision Fitness & Flow** führt dich durch einen flexiblen Hybrid-Wochenplan (Precision Flow & Military Task). Er kombiniert gezieltes Krafttraining (Sätze) mit intensiv geführten HIIT-Einheiten (High-Intensity Interval Training). Eine Kernkomponente der App ist der detaillierte Chronos-Timer, der dich visuell und akustisch durch Belastungs- und Erholungsphasen steuert. Das alles geschieht komplett lokal – ohne Nutzerkonten, ohne Cloud-Sync und ohne Tracking.
 
 ## ✨ Kernfunktionen
-- **Flexibler Hybrid-Wochenplan**: Wähle jeden Tag spontan zwischen Precision Flow (Technik) oder Military Task (Leistung).
+- **5-Tage Muskelaufbau & HIIT**: Ein strukturierter Wochenplan mit 3x Krafttraining und 2x HIIT, ergänzt durch Regeneration am Wochenende.
+- **Flexibler Hybrid-Wochenplan**: Wähle jeden Tag spontan zwischen Precision Flow (Basis) oder Military Task (Leistung) sowie 3 verschiedenen HIIT-Optionen.
 - **Chronos-Timer**: Ein präziser Countdown-Ring, der dir exakt visualisiert, wann geboostet und wann pausiert wird.
 - **Dynamisches Trainings-Erlebnis**: Sprachansagen als virtueller Coach (TTS), haptisches Vibrations-Feedback bei Pausen-/Übungswechsel und automatischer Wakelock, damit das Display an bleibt.
 - **Absoluter Datenschutz**: Es werden keinerlei persönliche Daten gesammelt. Deine Trainings-Historie bleibt ohne Umwege rein auf deinem Endgerät.
-- **12 Kernübungen**: Geführt mit minimalistischen Illustrationen (Liegestütze, Kniebeugen, Ausfallschritte, Mountain Climbers, Burpees, Glute Bridges, Unterarmstütz, Wandsitz, Klimmzüge, Sprint/High Knees, Dauerlauf, Dehnen).
+- **18 Kernübungen & Varianten**: Geführt mit hochwertigen, premium Illustrationen (inkl. Diamant-Liegestütze, Sprungkniebeugen, Puls-Kniebeugen, Walking Lunges etc.).
 - **Integrierter Gelenkschutz**: Direkte Warnhinweise insbesondere bei plyometrischen (sprungbasierten) Übungen.
 
 ## 🛠 Tech Stack

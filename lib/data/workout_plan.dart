@@ -6,13 +6,35 @@ import 'models/exercise.dart';
 // REUSABLE EXERCISES
 const pushUps = Exercise(
   id: 'push_ups',
-  name: 'Liegestütze',
+  name: 'Liegestütze (Basis)',
   nameEn: 'Push-Ups',
   type: ExerciseType.strength,
   focus: [MuscleGroup.chest, MuscleGroup.core, MuscleGroup.shoulders],
   executionHint: 'Rumpf gespannt halten',
   isPlyometric: false,
   imageAssetPath: 'assets/images/pushup.png',
+);
+
+const inclinePushUps = Exercise(
+  id: 'push_ups_incline',
+  name: 'Schräge Liegestütze',
+  nameEn: 'Incline Push-Ups',
+  type: ExerciseType.strength,
+  focus: [MuscleGroup.chest, MuscleGroup.shoulders],
+  executionHint: 'Hände auf erhöhte Fläche',
+  isPlyometric: false,
+  imageAssetPath: 'assets/images/incline_pushup.png',
+);
+
+const diamondPushUps = Exercise(
+  id: 'push_ups_diamond',
+  name: 'Diamant-Liegestütze',
+  nameEn: 'Diamond Push-Ups',
+  type: ExerciseType.strength,
+  focus: [MuscleGroup.triceps, MuscleGroup.chest],
+  executionHint: 'Hände bilden ein Dreieck unter der Brust',
+  isPlyometric: false,
+  imageAssetPath: 'assets/images/diamond_pushup.png',
 );
 
 const lunges = Exercise(
@@ -58,6 +80,17 @@ const mountainClimbers = Exercise(
   executionHint: 'Knie schnell zur Brust ziehen',
   isPlyometric: true,
   imageAssetPath: 'assets/images/mountain_climber.png',
+);
+
+const jumpingJacks = Exercise(
+  id: 'jumping_jacks',
+  name: 'Hampelmänner',
+  nameEn: 'Jumping Jacks',
+  type: ExerciseType.hiit,
+  focus: [MuscleGroup.fullBody],
+  executionHint: 'Weiche Landung zum Gelenkschutz',
+  isPlyometric: true,
+  imageAssetPath: 'assets/images/jumping_jack.png',
 );
 
 const plank = Exercise(
@@ -110,9 +143,42 @@ const squats = Exercise(
   nameEn: 'Squats',
   type: ExerciseType.strength,
   focus: [MuscleGroup.lowerBody],
-  executionHint: 'Rücken gerade halten',
+  executionHint: 'Rücken gerade halten, Fersen am Boden',
   isPlyometric: false,
   imageAssetPath: 'assets/images/squat.png',
+);
+
+const jumpingSquats = Exercise(
+  id: 'squats_jumping',
+  name: 'Sprungkniebeugen',
+  nameEn: 'Jumping Squats',
+  type: ExerciseType.hiit,
+  focus: [MuscleGroup.lowerBody, MuscleGroup.fullBody],
+  executionHint: 'Explosive Sprünge nach oben',
+  isPlyometric: true,
+  imageAssetPath: 'assets/images/jumping_squat.png',
+);
+
+const pulsingSquats = Exercise(
+  id: 'squats_pulsing',
+  name: 'Puls-Kniebeugen',
+  nameEn: 'Pulsing Squats',
+  type: ExerciseType.strength,
+  focus: [MuscleGroup.lowerBody],
+  executionHint: 'Kurze, wippende Bewegungen am tiefsten Punkt',
+  isPlyometric: false,
+  imageAssetPath: 'assets/images/pulsing_squat.png',
+);
+
+const walkingLunges = Exercise(
+  id: 'lunges_walking',
+  name: 'Gehende Ausfallschritte',
+  nameEn: 'Walking Lunges',
+  type: ExerciseType.strength,
+  focus: [MuscleGroup.lowerBody, MuscleGroup.core],
+  executionHint: 'Kontrolliert nach vorne treten',
+  isPlyometric: false,
+  imageAssetPath: 'assets/images/walking_lunge.png',
 );
 
 const longRun = Exercise(
@@ -143,162 +209,239 @@ const stretching = Exercise(
 // -------------------------------------------------------------------------------- //
 
 final kProgramHybrid = WorkoutProgram(
-  id: 'hybrid_pp',
-  title: 'Precision & Performance Hybrid',
-  description: 'Wöchentlich rotierender Plan: Wähle jeden Tag zwischen Precision Flow (Technik) oder Military Task (Leistung).',
+  id: 'hybrid_pp_5day',
+  title: '5-Tage Muskelaufbau & HIIT',
+  description: 'Wöchentlicher Fokus auf Kraft und HIIT. 3x Kraft, 2x HIIT, 2x Regeneration.',
   days: [
-    // --- MONTAG ---
+    // --- MONTAG (Krafttraining) ---
     const TrainingDay(
       id: 'mon_opt_a',
       week: 1,
       dayOfWeek: 1,
-      title: 'Montag – Precision Flow (PFF)',
+      title: 'Montag – Precision Flow (Elementar)',
       type: 'strength',
-      optionLabel: 'Option A: PFF (Kraft/Core)',
+      optionLabel: 'Option A: PFF (Kraft Basis)',
       steps: [
-        WorkoutStep(exercise: pushUps, sets: 1, reps: 15, restSeconds: 60),
-        WorkoutStep(exercise: lunges, sets: 1, reps: 20, restSeconds: 60),
+        WorkoutStep(exercise: inclinePushUps, sets: 3, reps: 15, restSeconds: 60),
+        WorkoutStep(exercise: squats, sets: 3, reps: 20, restSeconds: 60),
+        WorkoutStep(exercise: lunges, sets: 3, reps: 15, restSeconds: 60),
       ],
     ),
     const TrainingDay(
       id: 'mon_opt_b',
       week: 1,
       dayOfWeek: 1,
-      title: 'Montag – Military Task (MT)',
+      title: 'Montag – Military Task (Intensiv)',
       type: 'strength',
-      optionLabel: 'Option B: MT (Kraft-Volumen)',
+      optionLabel: 'Option B: MT (Advanced Power)',
       steps: [
-        WorkoutStep(exercise: pushUps, sets: 3, reps: 20, restSeconds: 45),
-        WorkoutStep(exercise: lunges, sets: 3, reps: 24, restSeconds: 45),
-        WorkoutStep(exercise: gluteBridges, sets: 3, reps: 20, restSeconds: 45),
+        WorkoutStep(exercise: diamondPushUps, sets: 3, reps: 15, restSeconds: 45),
+        WorkoutStep(exercise: squats, sets: 3, reps: 25, restSeconds: 45),
+        WorkoutStep(exercise: walkingLunges, sets: 3, reps: 20, restSeconds: 45),
       ],
     ),
 
-    // --- DIENSTAG ---
+    // --- DIENSTAG (HIIT) ---
     const TrainingDay(
       id: 'tue_opt_a',
       week: 1,
       dayOfWeek: 2,
-      title: 'Dienstag – Precision Flow (PFF)',
+      title: 'Dienstag – HIIT Option A',
       type: 'hiit',
-      optionLabel: 'Option A: PFF (Anaerob/Speed)',
+      optionLabel: 'Option A: PFF (Core & Ausdauer)',
       steps: [
-        WorkoutStep(exercise: mountainClimbers, durationSeconds: 30, restSeconds: 15),
-        WorkoutStep(exercise: burpees, durationSeconds: 30, restSeconds: 15),
+        WorkoutStep(exercise: mountainClimbers, durationSeconds: 30, restSeconds: 20),
+        WorkoutStep(exercise: jumpingJacks, durationSeconds: 30, restSeconds: 20),
+        WorkoutStep(exercise: mountainClimbers, durationSeconds: 30, restSeconds: 20),
+        WorkoutStep(exercise: jumpingJacks, durationSeconds: 30, restSeconds: 20),
+        WorkoutStep(exercise: mountainClimbers, durationSeconds: 30, restSeconds: 20),
+        WorkoutStep(exercise: jumpingJacks, durationSeconds: 30, restSeconds: 20),
+        WorkoutStep(exercise: mountainClimbers, durationSeconds: 30, restSeconds: 20),
+        WorkoutStep(exercise: jumpingJacks, durationSeconds: 30, restSeconds: 20),
       ],
     ),
     const TrainingDay(
       id: 'tue_opt_b',
       week: 1,
       dayOfWeek: 2,
-      title: 'Dienstag – Military Task (MT)',
+      title: 'Dienstag – HIIT Option B',
       type: 'hiit',
-      optionLabel: 'Option B: MT (Intervall-Sprint)',
+      optionLabel: 'Option B: MT (Kraftpaket)',
       steps: [
-        WorkoutStep(exercise: sprint, durationSeconds: 60, restSeconds: 60),
-        WorkoutStep(exercise: sprint, durationSeconds: 60, restSeconds: 60),
-        WorkoutStep(exercise: sprint, durationSeconds: 60, restSeconds: 60),
+        WorkoutStep(exercise: burpees, durationSeconds: 30, restSeconds: 10),
+        WorkoutStep(exercise: jumpingSquats, durationSeconds: 20, restSeconds: 10),
+        WorkoutStep(exercise: burpees, durationSeconds: 30, restSeconds: 10),
+        WorkoutStep(exercise: jumpingSquats, durationSeconds: 20, restSeconds: 10),
+        WorkoutStep(exercise: burpees, durationSeconds: 30, restSeconds: 10),
+        WorkoutStep(exercise: jumpingSquats, durationSeconds: 20, restSeconds: 10),
+        WorkoutStep(exercise: burpees, durationSeconds: 30, restSeconds: 10),
+        WorkoutStep(exercise: jumpingSquats, durationSeconds: 20, restSeconds: 10),
+        WorkoutStep(exercise: burpees, durationSeconds: 30, restSeconds: 10),
+        WorkoutStep(exercise: jumpingSquats, durationSeconds: 20, restSeconds: 10),
+      ],
+    ),
+    const TrainingDay(
+      id: 'tue_opt_c',
+      week: 1,
+      dayOfWeek: 2,
+      title: 'Dienstag – HIIT Option C',
+      type: 'hiit',
+      optionLabel: 'Option C: Advanced (Intensity)',
+      steps: [
+        WorkoutStep(exercise: diamondPushUps, durationSeconds: 30, restSeconds: 15),
+        WorkoutStep(exercise: pulsingSquats, durationSeconds: 30, restSeconds: 15),
+        WorkoutStep(exercise: walkingLunges, durationSeconds: 30, restSeconds: 15),
+        WorkoutStep(exercise: diamondPushUps, durationSeconds: 30, restSeconds: 15),
+        WorkoutStep(exercise: pulsingSquats, durationSeconds: 30, restSeconds: 15),
+        WorkoutStep(exercise: walkingLunges, durationSeconds: 30, restSeconds: 15),
+        WorkoutStep(exercise: diamondPushUps, durationSeconds: 30, restSeconds: 15),
+        WorkoutStep(exercise: pulsingSquats, durationSeconds: 30, restSeconds: 15),
+        WorkoutStep(exercise: walkingLunges, durationSeconds: 30, restSeconds: 15),
+        WorkoutStep(exercise: diamondPushUps, durationSeconds: 30, restSeconds: 15),
+        WorkoutStep(exercise: pulsingSquats, durationSeconds: 30, restSeconds: 15),
+        WorkoutStep(exercise: walkingLunges, durationSeconds: 30, restSeconds: 15),
       ],
     ),
 
-    // --- MITTWOCH ---
+    // --- MITTWOCH (Krafttraining) ---
     const TrainingDay(
       id: 'wed_opt_a',
       week: 1,
       dayOfWeek: 3,
-      title: 'Mittwoch – Precision Flow (PFF)',
+      title: 'Mittwoch – Precision Flow (Fokus)',
       type: 'strength',
-      optionLabel: 'Option A: PFF (Isometrik)',
+      optionLabel: 'Option A: PFF (Kontrolle)',
       steps: [
-        WorkoutStep(exercise: plank, sets: 1, durationSeconds: 60, restSeconds: 30),
+        WorkoutStep(exercise: pushUps, sets: 3, reps: 15, restSeconds: 60),
+        WorkoutStep(exercise: squats, sets: 3, reps: 20, restSeconds: 60),
+        WorkoutStep(exercise: lunges, sets: 3, reps: 15, restSeconds: 60),
       ],
     ),
     const TrainingDay(
       id: 'wed_opt_b',
       week: 1,
       dayOfWeek: 3,
-      title: 'Mittwoch – Military Task (MT)',
+      title: 'Mittwoch – Military Task (Muskelreiz)',
       type: 'strength',
-      optionLabel: 'Option B: MT (Statik-Zirkel)',
+      optionLabel: 'Option B: MT (Volumen)',
       steps: [
-        WorkoutStep(exercise: wallSit, sets: 3, durationSeconds: 60, restSeconds: 30),
-        WorkoutStep(exercise: plank, sets: 3, durationSeconds: 90, restSeconds: 30),
+        WorkoutStep(exercise: diamondPushUps, sets: 4, reps: 15, restSeconds: 45),
+        WorkoutStep(exercise: pulsingSquats, sets: 4, reps: 25, restSeconds: 45),
+        WorkoutStep(exercise: walkingLunges, sets: 4, reps: 20, restSeconds: 45),
       ],
     ),
 
-    // --- DONNERSTAG ---
+    // --- DONNERSTAG (HIIT) ---
     const TrainingDay(
-      id: 'thu_rest',
+      id: 'thu_opt_a',
       week: 1,
       dayOfWeek: 4,
-      title: 'Donnerstag – Regeneration',
-      type: 'rest',
-      optionLabel: 'Regeneration / Mobility',
+      title: 'Donnerstag – HIIT Option A',
+      type: 'hiit',
+      optionLabel: 'Option A: PFF (Ausdauer)',
       steps: [
-        WorkoutStep(exercise: stretching, durationSeconds: 300),
+        WorkoutStep(exercise: mountainClimbers, durationSeconds: 30, restSeconds: 20),
+        WorkoutStep(exercise: jumpingJacks, durationSeconds: 30, restSeconds: 20),
+        WorkoutStep(exercise: mountainClimbers, durationSeconds: 30, restSeconds: 20),
+        WorkoutStep(exercise: jumpingJacks, durationSeconds: 30, restSeconds: 20),
+        WorkoutStep(exercise: mountainClimbers, durationSeconds: 30, restSeconds: 20),
+        WorkoutStep(exercise: jumpingJacks, durationSeconds: 30, restSeconds: 20),
+        WorkoutStep(exercise: mountainClimbers, durationSeconds: 30, restSeconds: 20),
+        WorkoutStep(exercise: jumpingJacks, durationSeconds: 30, restSeconds: 20),
+      ],
+    ),
+    const TrainingDay(
+      id: 'thu_opt_b',
+      week: 1,
+      dayOfWeek: 4,
+      title: 'Donnerstag – HIIT Option B',
+      type: 'hiit',
+      optionLabel: 'Option B: MT (Explosivität)',
+      steps: [
+        WorkoutStep(exercise: burpees, durationSeconds: 30, restSeconds: 10),
+        WorkoutStep(exercise: jumpingSquats, durationSeconds: 20, restSeconds: 10),
+        WorkoutStep(exercise: burpees, durationSeconds: 30, restSeconds: 10),
+        WorkoutStep(exercise: jumpingSquats, durationSeconds: 20, restSeconds: 10),
+        WorkoutStep(exercise: burpees, durationSeconds: 30, restSeconds: 10),
+        WorkoutStep(exercise: jumpingSquats, durationSeconds: 20, restSeconds: 10),
+        WorkoutStep(exercise: burpees, durationSeconds: 30, restSeconds: 10),
+        WorkoutStep(exercise: jumpingSquats, durationSeconds: 20, restSeconds: 10),
+        WorkoutStep(exercise: burpees, durationSeconds: 30, restSeconds: 10),
+        WorkoutStep(exercise: jumpingSquats, durationSeconds: 20, restSeconds: 10),
+      ],
+    ),
+    const TrainingDay(
+      id: 'thu_opt_c',
+      week: 1,
+      dayOfWeek: 4,
+      title: 'Donnerstag – HIIT Option C',
+      type: 'hiit',
+      optionLabel: 'Option C: Advanced (Elite)',
+      steps: [
+        WorkoutStep(exercise: diamondPushUps, durationSeconds: 30, restSeconds: 15),
+        WorkoutStep(exercise: pulsingSquats, durationSeconds: 30, restSeconds: 15),
+        WorkoutStep(exercise: walkingLunges, durationSeconds: 30, restSeconds: 15),
+        WorkoutStep(exercise: diamondPushUps, durationSeconds: 30, restSeconds: 15),
+        WorkoutStep(exercise: pulsingSquats, durationSeconds: 30, restSeconds: 15),
+        WorkoutStep(exercise: walkingLunges, durationSeconds: 30, restSeconds: 15),
+        WorkoutStep(exercise: diamondPushUps, durationSeconds: 30, restSeconds: 15),
+        WorkoutStep(exercise: pulsingSquats, durationSeconds: 30, restSeconds: 15),
+        WorkoutStep(exercise: walkingLunges, durationSeconds: 30, restSeconds: 15),
+        WorkoutStep(exercise: diamondPushUps, durationSeconds: 30, restSeconds: 15),
+        WorkoutStep(exercise: pulsingSquats, durationSeconds: 30, restSeconds: 15),
+        WorkoutStep(exercise: walkingLunges, durationSeconds: 30, restSeconds: 15),
       ],
     ),
 
-    // --- FREITAG ---
+    // --- FREITAG (Krafttraining) ---
     const TrainingDay(
       id: 'fri_opt_a',
       week: 1,
       dayOfWeek: 5,
-      title: 'Freitag – Precision Flow (PFF)',
+      title: 'Freitag – Precision Flow (Sauberkeit)',
       type: 'strength',
-      optionLabel: 'Option A: PFF (Symmetrie)',
+      optionLabel: 'Option A: PFF (Ausführung)',
       steps: [
-        WorkoutStep(exercise: squats, sets: 2, reps: 15, restSeconds: 60),
-        WorkoutStep(exercise: pullUps, sets: 2, reps: 8, restSeconds: 60),
+        WorkoutStep(exercise: inclinePushUps, sets: 3, reps: 15, restSeconds: 60),
+        WorkoutStep(exercise: squats, sets: 3, reps: 20, restSeconds: 60),
+        WorkoutStep(exercise: lunges, sets: 3, reps: 15, restSeconds: 60),
       ],
     ),
     const TrainingDay(
       id: 'fri_opt_b',
       week: 1,
       dayOfWeek: 5,
-      title: 'Freitag – Military Task (MT)',
+      title: 'Freitag – Military Task (Finale)',
       type: 'strength',
-      optionLabel: 'Option B: MT (High Volume Calisthenics)',
+      optionLabel: 'Option B: MT (Belastung)',
       steps: [
-        WorkoutStep(exercise: pullUps, sets: 4, reps: 10, restSeconds: 90),
-        WorkoutStep(exercise: squats, sets: 4, reps: 25, restSeconds: 60),
-        WorkoutStep(exercise: pushUps, sets: 4, reps: 20, restSeconds: 60),
+        WorkoutStep(exercise: diamondPushUps, sets: 4, reps: 15, restSeconds: 45),
+        WorkoutStep(exercise: jumpingSquats, sets: 4, reps: 20, restSeconds: 45),
+        WorkoutStep(exercise: burpees, sets: 4, reps: 15, restSeconds: 45),
       ],
     ),
 
-    // --- SAMSTAG ---
+    // --- SAMSTAG (Regeneration) ---
     const TrainingDay(
-      id: 'sat_opt_a',
+      id: 'sat_rest',
       week: 1,
       dayOfWeek: 6,
-      title: 'Samstag – Precision Flow (PFF)',
-      type: 'hiit', // as flow mastery could be dynamic
-      optionLabel: 'Option A: PFF (Flow Mastery)',
+      title: 'Samstag – Regeneration',
+      type: 'rest',
+      optionLabel: 'Regeneration / Yoga',
       steps: [
-        WorkoutStep(exercise: mountainClimbers, durationSeconds: 40, restSeconds: 20),
-        WorkoutStep(exercise: burpees, durationSeconds: 40, restSeconds: 20),
-      ],
-    ),
-    const TrainingDay(
-      id: 'sat_opt_b',
-      week: 1,
-      dayOfWeek: 6,
-      title: 'Samstag – Military Task (MT)',
-      type: 'rest', // using rest type to render static description
-      optionLabel: 'Option B: MT (Long Run)',
-      steps: [
-        WorkoutStep(exercise: longRun, durationSeconds: 3600), // 1 hour 
+        WorkoutStep(exercise: stretching, durationSeconds: 300),
       ],
     ),
 
-    // --- SONNTAG ---
+    // --- SONNTAG (Regeneration) ---
     const TrainingDay(
       id: 'sun_rest',
       week: 1,
       dayOfWeek: 7,
       title: 'Sonntag – Rest Day',
       type: 'rest',
-      optionLabel: 'Regeneration',
+      optionLabel: 'Ruhephase',
       steps: [],
     ),
   ],
@@ -322,15 +465,21 @@ final kAllPrograms = [
 
 final kExercises = [
   pushUps,
+  inclinePushUps,
+  diamondPushUps,
   lunges,
+  walkingLunges,
   gluteBridges,
   burpees,
   mountainClimbers,
+  jumpingJacks,
   plank,
   wallSit,
   sprint,
   pullUps,
   squats,
+  jumpingSquats,
+  pulsingSquats,
   longRun,
   stretching,
 ];
