@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Badge;
 import '../core/constants/app_colors.dart';
 import '../core/services/badge_service.dart';
 
 class BadgeItem extends StatelessWidget {
-  final Badge badge;
+  final WorkoutBadge badge;
 
   const BadgeItem({super.key, required this.badge});
 

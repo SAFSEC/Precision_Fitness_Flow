@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Badge;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'motivation_service.dart';
 
 enum BadgeTier { bronze, silver, gold }
 
-class Badge {
+class WorkoutBadge {
   final String id;
   final String name;
   final String description;
@@ -13,7 +13,7 @@ class Badge {
   final BadgeTier tier;
   final String category;
 
-  Badge({
+  WorkoutBadge({
     required this.id,
     required this.name,
     required this.description,
@@ -25,12 +25,12 @@ class Badge {
   String get key => '${category}_${tier.name}';
 }
 
-final badgeServiceProvider = StateNotifierProvider<BadgeService, List<Badge>>((ref) {
+final badgeServiceProvider = StateNotifierProvider<BadgeService, List<WorkoutBadge>>((ref) {
   final stats = ref.watch(motivationStatsProvider);
   return BadgeService(stats);
 });
 
-class BadgeService extends StateNotifier<List<Badge>> {
+class BadgeService extends StateNotifier<List<WorkoutBadge>> {
   final MotivationStats _stats;
   final Box<String> _box = Hive.box<String>('badges');
 
@@ -73,7 +73,7 @@ class BadgeService extends StateNotifier<List<Badge>> {
   }
 
   void _loadBadges() {
-    final unlocked = <Badge>[];
+    final unlocked = <WorkoutBadge>[];
     
     // Streak Badges
     _addIfUnlocked(unlocked, 'streak', BadgeTier.gold, 'Streak-Legende', '30 Tage am Stück trainiert', Icons.local_fire_department);
@@ -98,10 +98,10 @@ class BadgeService extends StateNotifier<List<Badge>> {
     state = unlocked;
   }
 
-  void _addIfUnlocked(List<Badge> list, String category, BadgeTier tier, String name, String desc, IconData icon) {
+  void _addIfUnlocked(List<WorkoutBadge> list, String category, BadgeTier tier, String name, String desc, IconData icon) {
     final key = '${category}_${tier.name}';
     if (_box.containsKey(key)) {
-      list.add(Badge(
+      list.add(WorkoutBadge(
         id: key,
         name: name,
         description: desc,
