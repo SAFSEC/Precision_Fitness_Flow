@@ -9,15 +9,16 @@ Stelle keine Fragen – alle Entscheidungen sind hier getroffen.
 
 ## Entwicklungsstand
 ```
-Stand: 28. März 2026
-Abgeschlossene Phasen: 1, 2, 3, 4, 5, 6, 6.5, 7, 8, 9, 9.1, 9.2, 9.3 (5-Tage-Plan)
+Stand: 29. März 2026
+Abgeschlossene Phasen: 1, 2, 3, 4, 5, 6, 6.5, 7, 8, 9, 9.1, 9.2, 9.3 (5-Tage-Plan), 9.4 (Audio-Bugfix & 5s Countdown)
 Offene Phasen: 10, 11, 12
 Bekannte Probleme: –
 Nächster Schritt: Phase 10 – Motivation & Progress Tracking
 Privacy-Stack: nicht aktiv (keine personenbezogenen Daten)
 
-Neuerungen (Phase 9.3):
+Neuerungen (Phase 9.3 / 9.4):
 - 5-Tage-Trainingsplan: Umstellung auf 3x Kraft, 2x HIIT, 2x Regeneration.
+- Audio-Fix (Phase 9.4): Robuste TTS-Initialisierung und neuer 5-Sekunden-Sprach-Countdown für Belastung und Pausen.
 - Premium Assets: 6 neue hochqualitative Illustrationen für Übungsvarianten.
 - Neue Übungen: Diamant-Liegestütze, Schräge Liegestütze, Sprungkniebeugen, Puls-Kniebeugen, Gehende Ausfallschritte, Hampelmänner.
 - HIIT-Struktur: 3 wählbare Optionen (A, B, C) für maximale Flexibilität.
@@ -282,13 +283,12 @@ const kStrengthRestWeek3   = 45;   // Satzpause Kraft (Woche 3)
 const kTransitionSeconds   = 5;    // Übungswechsel-Vorbereitungszeit
 ```
 
-### 5.3 Akustische Signale
-
-| Ereignis | Sound-Datei | Verhalten |
+| Ereignis | Sound-Datei / Voice | Verhalten |
 |---|---|---|
-| Work beginnt | `beep_work.mp3` | Einzelner kurzer Ton |
-| Rest beginnt | `beep_rest.mp3` | Zwei kurze Töne |
-| Transition | `beep_transition.mp3` | Drei kurze Töne |
+| Work beginnt | `beep_work.mp3` + Name | "Training startet. [Name]" oder Signalton |
+| Rest beginnt | `beep_rest.mp3` + Name | "Pause. Nächste Übung: [Name]" |
+| Transition | `beep_transition.mp3` | Drei kurze Töne (Rundenwechsel) |
+| Letzten 10/5 Sek. | Sprachansage | "Noch 10 Sekunden" / "Noch 5 Sekunden" |
 | Letzten 3 Sek. | `beep_work.mp3` (3×) | Countdown-Ticks |
 | Training fertig | Alle drei kurz | Abschluss-Signal |
 

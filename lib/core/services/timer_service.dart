@@ -98,6 +98,7 @@ class TimerService extends StateNotifier<TimerState> {
 
   void cancel() {
     _timer?.cancel();
+    _voiceService.stop();
     state = const TimerState(
       phase: TimerPhase.idle,
       remainingSeconds: 0,
@@ -120,8 +121,13 @@ class TimerService extends StateNotifier<TimerState> {
       if (state.remainingSeconds > 0) {
         final newRemaining = state.remainingSeconds - 1;
         
-        if (newRemaining == 10 && _isHiit && state.phase != TimerPhase.transition) {
+        if (newRemaining == 10 && _isHiit && state.phase == TimerPhase.work) {
            _voiceService.speak("Noch 10 Sekunden");
+        }
+        
+        if (newRemaining == 5 && _isHiit && 
+            (state.phase == TimerPhase.work || state.phase == TimerPhase.rest || state.phase == TimerPhase.transition)) {
+           _voiceService.speak("Noch 5 Sekunden");
         }
         
         if (newRemaining > 0 && newRemaining <= 3) {

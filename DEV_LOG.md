@@ -84,6 +84,12 @@ Offene Phasen: 10 (Motivation), 11 (Smarte Steuerung), 12 (V2 Roadmap)
 48. **Visuals: Premium Assets**: Generierung und Integration von 6 hochqualitativen Illustrationen für Übungsvarianten (Diamant-Liegestütze, Schräge Liegestütze, Sprungkniebeugen, Puls-Kniebeugen, Gehende Ausfallschritte, Hampelmänner).
 49. **Übungen**: Erweiterung der Übungsdatenbank auf 18 Varianten inkl. spezifischer Ausführungshinweise für die neuen Kraft-Progressionsstufen.
 
+**Phase 9.4 – Audio-Refinement (29. März 2026)**
+50. **Bugfix: TTS-Initialisierung**: `VoiceService` robustifiziert. Verwendet nun einen `Completer`, um sicherzustellen, dass die Sprach-Engine bereit ist, bevor die erste Ansage ("Training startet") erfolgt. Verhindert verlorene Audio-Queues bei schnellem Workout-Start.
+51. **Feature: 5-Sekunden-Ansage**: Sprach-Countdown bei noch 5 verbleibenden Sekunden in Belastungs-, Pausen- und Übergangsphasen hinzugefügt ("Noch 5 Sekunden").
+52. **iOS-Audio-Session**: `setSharedInstance(true)` für bessere iOS-Integration aktiviert.
+53. **Voice-Stop**: Sofortiger Stopp aller Sprachausgaben beim Abbrechen oder Schließen eines Workouts.
+
 ---
 
 ## 2. Historischer Starter-Prompt (Cursor / Claude Code)
