@@ -10,18 +10,17 @@ Stelle keine Fragen – alle Entscheidungen sind hier getroffen.
 ## Entwicklungsstand
 ```
 Stand: 29. März 2026
-Abgeschlossene Phasen: 1, 2, 3, 4, 5, 6, 6.5, 7, 8, 9, 9.1, 9.2, 9.3 (5-Tage-Plan), 9.4 (Audio-Bugfix & 5s Countdown)
-Offene Phasen: 10, 11, 12
+Abgeschlossene Phasen: 1, 2, 3, 4, 5, 6, 6.5, 7, 8, 9, 9.1, 9.2, 9.3, 9.4, 10 (Motivation)
+Offene Phasen: 11, 12
 Bekannte Probleme: –
-Nächster Schritt: Phase 10 – Motivation & Progress Tracking
+Nächster Schritt: Phase 11 – Smarte Steuerung & Feedback
 Privacy-Stack: nicht aktiv (keine personenbezogenen Daten)
 
-Neuerungen (Phase 9.3 / 9.4):
-- 5-Tage-Trainingsplan: Umstellung auf 3x Kraft, 2x HIIT, 2x Regeneration.
-- Audio-Fix (Phase 9.4): Robuste TTS-Initialisierung und neuer 5-Sekunden-Sprach-Countdown für Belastung und Pausen.
-- Premium Assets: 6 neue hochqualitative Illustrationen für Übungsvarianten.
-- Neue Übungen: Diamant-Liegestütze, Schräge Liegestütze, Sprungkniebeugen, Puls-Kniebeugen, Gehende Ausfallschritte, Hampelmänner.
-- HIIT-Struktur: 3 wählbare Optionen (A, B, C) für maximale Flexibilität.
+- Neuerungen (Phase 10):
+- Workout-Heatmap: GitHub-Style Aktivitäts-Grid für die letzten 16 Wochen in der Historie.
+- Streak-System: Automatischer Zähler für aufeinanderfolgende Trainingstage.
+- Erfolgs-Badges: Permanentes Abzeichen-System mit 3 Stufen (Bronze, Silber, Gold) für Streaks, HIIT-Anzahl, Kraft-Anzahl und Gesamt-Workouts.
+- Persistenz: Eigene Hive-Box (`badges`) für dauerhafte Speicherung der Erfolge.
 ```
 
 
@@ -532,8 +531,14 @@ jobs:
 41. Integration von 6 neuen premium visual Assets für Übungsvarianten.
 42. Erweiterung der HIIT-Logik auf 3 wählbare Optionen pro HIIT-Tag.
 
-**Phase 10 – Motivation & Progress Tracking (In Vorbereitung)**
-43. Konzepte für Heatmap und Streak-System entwerfen.
+**Phase 10 – Motivation & Progress Tracking**
+43. Workout-Heatmap (Aktivitäts-Raster) in `HistoryPage`.
+44. Streak-System zur Visualisierung der Beständigkeit.
+45. Erfolgs-Badges (Bronze, Silber, Gold) für Meilensteine.
+
+**Phase 11 – Smarte Steuerung & Feedback (Nächster Schritt)**
+46. Feedback-System nach dem Workout ("Wie war die Intensität?").
+47. Adaptive Anpassung der HIIT-Optionen basierend auf Feedback.
 
 ---
 

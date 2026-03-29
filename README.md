@@ -16,6 +16,7 @@ A fully offline, privacy-first, zero-equipment bodyweight training app built wit
 - **Dynamic Training Experience**: Voice coach announcements (TTS), haptic vibration feedback, and wakelock integration for a seamless hands-free workout flow.
 - **Zero Privacy Concerns**: No data collection, no forms, no tracking, and no external APIs. All your workout history stays strictly on your local device.
 - **18 Core Exercises & Variants**: Guided with high-quality, premium illustrations (including Diamond Push-Ups, Jumping Squats, Pulsing Squats, Walking Lunges, etc.).
+- **Motivation & Progress Tracking**: A GitHub-style activity grid (heatmap), a streak system, and permanent success badges in Bronze, Silver, and Gold keep you engaged daily.
 - **Adaptive Execution Guides**: Specific joint-safety warnings (especially for plyometric exercises) to prevent injuries.
 
 ## 🛠 Tech Stack

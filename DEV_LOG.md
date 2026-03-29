@@ -90,6 +90,12 @@ Offene Phasen: 10 (Motivation), 11 (Smarte Steuerung), 12 (V2 Roadmap)
 52. **iOS-Audio-Session**: `setSharedInstance(true)` für bessere iOS-Integration aktiviert.
 53. **Voice-Stop**: Sofortiger Stopp aller Sprachausgaben beim Abbrechen oder Schließen eines Workouts.
 
+**Phase 10 – Motivation & Progress Tracking (29. März 2026)**
+54. **Feature: Workout-Heatmap**: Implementierung eines GitHub-Style Aktivitäts-Rasters in der `HistoryPage`. Zeigt die letzten 16 Wochen an (horizontal scrollbar am Handy).
+55. **Feature: Streak-System**: Automatischer Zähler für aufeinanderfolgende Trainingstage zur Steigerung der Beständigkeit.
+56. **Feature: Erfolgs-Badges (Tiers)**: Medaillen-System mit permanenten Abzeichen in Bronze, Silber und Gold. Kategorien: Streak, HIIT-Anzahl, Kraft-Anzahl und Gesamt-Workouts.
+57. **Technik**: Einführung von `MotivationService` (Logik), `BadgeService` (Persistenz via Hive) und neuen UI-Widgets (`StreakCard`, `WorkoutHeatmapWidget`, `BadgeItem`).
+
 ---
 
 ## 2. Historischer Starter-Prompt (Cursor / Claude Code)

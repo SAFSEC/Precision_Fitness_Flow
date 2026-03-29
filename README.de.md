@@ -16,6 +16,7 @@ Eine vollständig offline lauffähige, datenschutzfreundliche Bodyweight-Trainin
 - **Dynamisches Trainings-Erlebnis**: Sprachansagen als virtueller Coach (TTS), haptisches Vibrations-Feedback bei Pausen-/Übungswechsel und automatischer Wakelock, damit das Display an bleibt.
 - **Absoluter Datenschutz**: Es werden keinerlei persönliche Daten gesammelt. Deine Trainings-Historie bleibt ohne Umwege rein auf deinem Endgerät.
 - **18 Kernübungen & Varianten**: Geführt mit hochwertigen, premium Illustrationen (inkl. Diamant-Liegestütze, Sprungkniebeugen, Puls-Kniebeugen, Walking Lunges etc.).
+- **Motivation & Fortschritt**: Ein GitHub-Style Aktivitäts-Raster (Heatmap), ein Streak-System und permanente Erfolgs-Badges in Bronze, Silber und Gold spornen dich täglich an.
 - **Integrierter Gelenkschutz**: Direkte Warnhinweise insbesondere bei plyometrischen (sprungbasierten) Übungen.
 
 ## 🛠 Tech Stack
