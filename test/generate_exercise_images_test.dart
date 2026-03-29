@@ -154,9 +154,9 @@ void drawTorso(Canvas c, Offset shoulderL, Offset shoulderR, Offset hipL, Offset
 
 Future<void> save(String name, void Function(Canvas, Size) draw) async {
   final recorder = ui.PictureRecorder();
-  final canvas = Canvas(recorder, Rect.fromLTWH(0, 0, kSize, kSize));
+  final canvas = Canvas(recorder, const Rect.fromLTWH(0, 0, kSize, kSize));
   // Background
-  canvas.drawRect(Rect.fromLTWH(0, 0, kSize, kSize), _fill(kBg));
+  canvas.drawRect(const Rect.fromLTWH(0, 0, kSize, kSize), _fill(kBg));
   draw(canvas, const Size(kSize, kSize));
   final picture = recorder.endRecording();
   final img = await picture.toImage(kSize.toInt(), kSize.toInt());
@@ -373,7 +373,7 @@ void drawPullUps(Canvas c, Size s) {
   drawBgGlow(c, const Offset(200, 180), 140);
 
   // Bar
-  final barRect = const Rect.fromLTRB(70, 75, 330, 88);
+  const barRect = Rect.fromLTRB(70, 75, 330, 88);
   c.drawRRect(RRect.fromRectAndRadius(barRect, const Radius.circular(6)), _fill(const Color(0xFF2D3748)));
   c.drawRRect(RRect.fromRectAndRadius(barRect, const Radius.circular(6)), _stroke(kFloor.withAlpha(100), 1.5));
 

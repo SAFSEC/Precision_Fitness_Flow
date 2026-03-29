@@ -55,9 +55,9 @@ class HomePage extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 8),
-            Text(
+            const Text(
               'Wähle dein heutiges Training',
-              style: const TextStyle(
+              style: TextStyle(
                 color: kColorText,
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -249,7 +249,7 @@ class HomePage extends ConsumerWidget {
                       Navigator.pop(context);
                     },
                   );
-                }).toList(),
+                }),
               ],
             ),
           ),

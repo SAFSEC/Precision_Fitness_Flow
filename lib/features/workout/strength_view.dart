@@ -38,7 +38,9 @@ class StrengthView extends ConsumerWidget {
     int totalSets = 0;
     
     // Calculate global total sets
-    for (var step in steps) totalSets += (step.sets ?? 3);
+    for (var step in steps) {
+      totalSets += (step.sets ?? 3);
+    }
 
     // Calculate which step and which set we are currently on based on global currentSetIndex
     int setsPassed = 0;

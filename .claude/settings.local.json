@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(flutter build:*)",
+      "Bash(python3 -c \":*)",
+      "Bash(flutter test:*)",
+      "Bash(flutter run:*)"
+    ]
+  }
+}

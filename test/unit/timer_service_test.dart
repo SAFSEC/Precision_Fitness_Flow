@@ -21,10 +21,10 @@ void main() {
   late MockVoiceService mockVoiceService;
 
     final testSteps = [
-      WorkoutStep(
+      const WorkoutStep(
         durationSeconds: 30,
         restSeconds: 20,
-        exercise: const Exercise(
+        exercise: Exercise(
           id: 'e1',
           name: 'Exercise 1',
           nameEn: 'E1',
@@ -34,10 +34,10 @@ void main() {
           isPlyometric: false,
         ),
       ),
-      WorkoutStep(
+      const WorkoutStep(
         durationSeconds: 30,
         restSeconds: 20,
-        exercise: const Exercise(
+        exercise: Exercise(
           id: 'e2',
           name: 'Exercise 2',
           nameEn: 'E2',

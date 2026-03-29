@@ -208,13 +208,13 @@ const stretching = Exercise(
 // MULTI-PROGRAM DEFINITIONS
 // -------------------------------------------------------------------------------- //
 
-final kProgramHybrid = WorkoutProgram(
+const kProgramHybrid = WorkoutProgram(
   id: 'hybrid_pp_5day',
   title: '5-Tage Muskelaufbau & HIIT',
   description: 'Wöchentlicher Fokus auf Kraft und HIIT. 3x Kraft, 2x HIIT, 2x Regeneration.',
   days: [
     // --- MONTAG (Krafttraining) ---
-    const TrainingDay(
+    TrainingDay(
       id: 'mon_opt_a',
       week: 1,
       dayOfWeek: 1,
@@ -227,7 +227,7 @@ final kProgramHybrid = WorkoutProgram(
         WorkoutStep(exercise: lunges, sets: 3, reps: 15, restSeconds: 60),
       ],
     ),
-    const TrainingDay(
+    TrainingDay(
       id: 'mon_opt_b',
       week: 1,
       dayOfWeek: 1,
@@ -242,7 +242,7 @@ final kProgramHybrid = WorkoutProgram(
     ),
 
     // --- DIENSTAG (HIIT) ---
-    const TrainingDay(
+    TrainingDay(
       id: 'tue_opt_a',
       week: 1,
       dayOfWeek: 2,
@@ -260,7 +260,7 @@ final kProgramHybrid = WorkoutProgram(
         WorkoutStep(exercise: jumpingJacks, durationSeconds: 30, restSeconds: 20),
       ],
     ),
-    const TrainingDay(
+    TrainingDay(
       id: 'tue_opt_b',
       week: 1,
       dayOfWeek: 2,
@@ -280,7 +280,7 @@ final kProgramHybrid = WorkoutProgram(
         WorkoutStep(exercise: jumpingSquats, durationSeconds: 20, restSeconds: 10),
       ],
     ),
-    const TrainingDay(
+    TrainingDay(
       id: 'tue_opt_c',
       week: 1,
       dayOfWeek: 2,
@@ -304,7 +304,7 @@ final kProgramHybrid = WorkoutProgram(
     ),
 
     // --- MITTWOCH (Krafttraining) ---
-    const TrainingDay(
+    TrainingDay(
       id: 'wed_opt_a',
       week: 1,
       dayOfWeek: 3,
@@ -317,7 +317,7 @@ final kProgramHybrid = WorkoutProgram(
         WorkoutStep(exercise: lunges, sets: 3, reps: 15, restSeconds: 60),
       ],
     ),
-    const TrainingDay(
+    TrainingDay(
       id: 'wed_opt_b',
       week: 1,
       dayOfWeek: 3,
@@ -332,7 +332,7 @@ final kProgramHybrid = WorkoutProgram(
     ),
 
     // --- DONNERSTAG (HIIT) ---
-    const TrainingDay(
+    TrainingDay(
       id: 'thu_opt_a',
       week: 1,
       dayOfWeek: 4,
@@ -350,7 +350,7 @@ final kProgramHybrid = WorkoutProgram(
         WorkoutStep(exercise: jumpingJacks, durationSeconds: 30, restSeconds: 20),
       ],
     ),
-    const TrainingDay(
+    TrainingDay(
       id: 'thu_opt_b',
       week: 1,
       dayOfWeek: 4,
@@ -370,7 +370,7 @@ final kProgramHybrid = WorkoutProgram(
         WorkoutStep(exercise: jumpingSquats, durationSeconds: 20, restSeconds: 10),
       ],
     ),
-    const TrainingDay(
+    TrainingDay(
       id: 'thu_opt_c',
       week: 1,
       dayOfWeek: 4,
@@ -394,7 +394,7 @@ final kProgramHybrid = WorkoutProgram(
     ),
 
     // --- FREITAG (Krafttraining) ---
-    const TrainingDay(
+    TrainingDay(
       id: 'fri_opt_a',
       week: 1,
       dayOfWeek: 5,
@@ -407,7 +407,7 @@ final kProgramHybrid = WorkoutProgram(
         WorkoutStep(exercise: lunges, sets: 3, reps: 15, restSeconds: 60),
       ],
     ),
-    const TrainingDay(
+    TrainingDay(
       id: 'fri_opt_b',
       week: 1,
       dayOfWeek: 5,
@@ -422,7 +422,7 @@ final kProgramHybrid = WorkoutProgram(
     ),
 
     // --- SAMSTAG (Regeneration) ---
-    const TrainingDay(
+    TrainingDay(
       id: 'sat_rest',
       week: 1,
       dayOfWeek: 6,
@@ -435,7 +435,7 @@ final kProgramHybrid = WorkoutProgram(
     ),
 
     // --- SONNTAG (Regeneration) ---
-    const TrainingDay(
+    TrainingDay(
       id: 'sun_rest',
       week: 1,
       dayOfWeek: 7,
@@ -449,12 +449,12 @@ final kProgramHybrid = WorkoutProgram(
 
 // We keep kProgram3Weeks as the fallback for "Classic" if needed, 
 // or the user can just delete it later. It is defined minimally to satisfy older code if any.
-final kProgram3Weeks = WorkoutProgram(
+const kProgram3Weeks = WorkoutProgram(
   id: 'classic_3w',
   title: 'Classic 3-Wochen (Legacy)',
   description: 'Veralteter starrer 21-Tage Plan',
   days: [
-    const TrainingDay(id: 'w1d1', week: 1, title: 'Tag 1', type: 'strength', steps: []),
+    TrainingDay(id: 'w1d1', week: 1, title: 'Tag 1', type: 'strength', steps: []),
   ]
 );
 

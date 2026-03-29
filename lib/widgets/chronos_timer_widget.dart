@@ -53,7 +53,7 @@ class ChronosTimerWidget extends StatelessWidget {
             alignment: Alignment.center,
             children: [
               // Background Ring
-              CircularProgressIndicator(
+              const CircularProgressIndicator(
                 value: 1.0,
                 strokeWidth: 12,
                 color: kColorSurface,

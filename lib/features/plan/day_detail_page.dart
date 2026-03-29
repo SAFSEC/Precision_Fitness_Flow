@@ -88,7 +88,7 @@ class DayDetailPage extends ConsumerWidget {
                     isThreeLine: true,
                   ),
                 );
-              }).toList(),
+              }),
             ],
             const SizedBox(height: 48),
             SizedBox(

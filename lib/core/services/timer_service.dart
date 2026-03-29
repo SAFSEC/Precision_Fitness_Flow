@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/models/timer_state.dart';
-import '../../data/models/exercise.dart';
 import '../../data/models/workout_step.dart';
 import '../constants/app_durations.dart';
 import 'audio_service.dart';
