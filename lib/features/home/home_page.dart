@@ -39,6 +39,11 @@ class HomePage extends ConsumerWidget {
             onPressed: () => context.push('/plan'),
             tooltip: 'Plan Übersicht',
           ),
+          IconButton(
+            icon: const Icon(Icons.history),
+            onPressed: () => context.push('/history'),
+            tooltip: 'Trainingshistorie',
+          ),
         ],
       ),
       body: SingleChildScrollView(

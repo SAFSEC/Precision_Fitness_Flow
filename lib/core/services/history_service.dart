@@ -12,7 +12,28 @@ final historyRepositoryProvider = Provider<HistoryRepository>((ref) {
   return HistoryRepository(box);
 });
 
-final historyListProvider = Provider<List<WorkoutSession>>((ref) {
+final historyServiceProvider = StateNotifierProvider<HistoryService, List<WorkoutSession>>((ref) {
   final repository = ref.watch(historyRepositoryProvider);
-  return repository.getAllSessions();
+  return HistoryService(repository);
+});
+
+class HistoryService extends StateNotifier<List<WorkoutSession>> {
+  final HistoryRepository _repository;
+  
+  HistoryService(this._repository) : super(_repository.getAllSessions());
+
+  Future<void> saveSession(WorkoutSession session) async {
+    await _repository.saveSession(session);
+    // Refresh the list immediately after saving
+    state = _repository.getAllSessions();
+  }
+
+  void deleteSession(int index) {
+    // Optional: implement if needed
+  }
+}
+
+// Convenient provider for the history list itself
+final historyListProvider = Provider<List<WorkoutSession>>((ref) {
+  return ref.watch(historyServiceProvider);
 });
