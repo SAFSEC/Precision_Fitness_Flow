@@ -9,18 +9,17 @@ Stelle keine Fragen – alle Entscheidungen sind hier getroffen.
 
 ## Entwicklungsstand
 ```
-Stand: 29. März 2026
-Abgeschlossene Phasen: 1, 2, 3, 4, 5, 6, 6.5, 7, 8, 9, 9.1, 9.2, 9.3, 9.4, 10 (Motivation)
+Stand: 30. März 2026
+Abgeschlossene Phasen: 1, 2, 3, 4, 5, 6, 6.5, 7, 8, 9, 9.1, 9.2, 9.3, 9.4, 10, 10.1 (CI & Audio-Fixes)
 Offene Phasen: 11, 12
 Bekannte Probleme: –
 Nächster Schritt: Phase 11 – Smarte Steuerung & Feedback
 Privacy-Stack: nicht aktiv (keine personenbezogenen Daten)
 
-- Neuerungen (Phase 10):
-- Workout-Heatmap: GitHub-Style Aktivitäts-Grid für die letzten 16 Wochen in der Historie.
-- Streak-System: Automatischer Zähler für aufeinanderfolgende Trainingstage.
-- Erfolgs-Badges: Permanentes Abzeichen-System mit 3 Stufen (Bronze, Silber, Gold) für Streaks, HIIT-Anzahl, Kraft-Anzahl und Gesamt-Workouts.
-- Persistenz: Eigene Hive-Box (`badges`) für dauerhafte Speicherung der Erfolge.
+- Neuerungen (Phase 10.1):
+- Audio-Polishing: `AudioService` auf `PlayerMode.lowLatency` umgestellt und Beep-Assets optimiert.
+- CI/CD Fix: Widget-Tests (`hiit_view_test.dart`) für Voice-Integration robustifiziert (Mocks + Timer-Handling).
+- Model-Konsistenz: `WorkoutSession` Konstruktor und `dayOfWeek` Logik synchronisiert.
 ```
 
 
@@ -548,10 +547,10 @@ jobs:
 Lies zuerst vollständig die CLAUDE.md in diesem Verzeichnis.
 Stelle keine Fragen – alle Entscheidungen sind dort getroffen.
 
-Phase 1-9.1 sind abgeschlossen.
-Nächster Schritt: Phase 10 (Motivation & Progress Tracking).
+Phase 1-10.1 sind abgeschlossen.
+Nächster Schritt: Phase 11 (Smarte Steuerung & Feedback).
 
-Startpunkt: Erstelle Konzepte für Heatmap und Streak-System basierend auf Erweiterung.md.
+Startpunkt: Implementierung eines Feedback-Dialogs nach dem Training ("Wie war es?").
 ```
 
 ---

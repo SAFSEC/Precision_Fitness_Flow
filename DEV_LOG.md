@@ -6,9 +6,9 @@ Dieses Dokument archiviert die abgeschlossenen Entwicklungsphasen und den Prozes
 
 ## Entwicklungsstand (V1.0 + Bugfix-Session abgeschlossen)
 ```
-Stand: 28. März 2026
-Abgeschlossene Phasen: 1, 2, 3, 4, 5, 6, 6.5, 7, 8, 9, 9.1, 9.2, 9.3 (5-Tage-Plan)
-Offene Phasen: 10 (Motivation), 11 (Smarte Steuerung), 12 (V2 Roadmap)
+Stand: 30. März 2026
+Abgeschlossene Phasen: 1, 2, 3, 4, 5, 6, 6.5, 7, 8, 9, 9.1, 9.2, 9.3, 9.4, 10, 10.1 (CI & Audio-Fixes)
+Offene Phasen: 11, 12
 ```
 
 ---
@@ -90,11 +90,10 @@ Offene Phasen: 10 (Motivation), 11 (Smarte Steuerung), 12 (V2 Roadmap)
 52. **iOS-Audio-Session**: `setSharedInstance(true)` für bessere iOS-Integration aktiviert.
 53. **Voice-Stop**: Sofortiger Stopp aller Sprachausgaben beim Abbrechen oder Schließen eines Workouts.
 
-**Phase 10 – Motivation & Progress Tracking (29. März 2026)**
-54. **Feature: Workout-Heatmap**: Implementierung eines GitHub-Style Aktivitäts-Rasters in der `HistoryPage`. Zeigt die letzten 16 Wochen an (horizontal scrollbar am Handy).
-55. **Feature: Streak-System**: Automatischer Zähler für aufeinanderfolgende Trainingstage zur Steigerung der Beständigkeit.
-56. **Feature: Erfolgs-Badges (Tiers)**: Medaillen-System mit permanenten Abzeichen in Bronze, Silber und Gold. Kategorien: Streak, HIIT-Anzahl, Kraft-Anzahl und Gesamt-Workouts.
-57. **Technik**: Einführung von `MotivationService` (Logik), `BadgeService` (Persistenz via Hive) und neuen UI-Widgets (`StreakCard`, `WorkoutHeatmapWidget`, `BadgeItem`).
+**Phase 10.1 – Audio-Reconciliation & CI-Fix (30. März 2026)**
+58. **Tech: Audio-Polishing**: `AudioService` auf `PlayerMode.lowLatency` umgestellt. Pre-loading von `AssetSource` Instanzen zur Latenz-Minimierung. Beep-Sounds (`work`, `rest`, `transition`) in `assets/audio/` finalisiert.
+59. **Bugfix: Model-Sync**: `WorkoutSession` Model um formalen Konstruktor erweitert, um Type-Safety (late fields) und Integration in `WorkoutCompletePage` zu garantieren. `dayOfWeek` Handling (nullable) robustifiziert.
+60. **CI/CD: Test-Fix**: `HiitView` Widget-Test repariert. Mocking von `VoiceService` und explizites Flushing von `Future.delayed` Timers hinzugefügt, um "Pending Timers" Fehler in GitHub Actions zu verhindern.
 
 ---
 
@@ -106,10 +105,10 @@ Beim Start der Entwicklung von V1 wurde folgender Prompt verwendet:
 Lies zuerst vollständig die CLAUDE.md in diesem Verzeichnis.
 Stelle keine Fragen – alle Entscheidungen sind dort getroffen.
 
-Phase 1-9 sind abgeschlossen.
-Nächster Schritt: Phase 10 (Motivation & Progress Tracking).
-Startpunkt für die nächste Sitzung: Erstelle Konzepte für Heatmap und Streak-System in Erweiterung.md.
+Phase 1-10.1 sind abgeschlossen.
+Nächster Schritt: Phase 11 (Smarte Steuerung & Feedback).
+Startpunkt für die nächste Sitzung: Implementierung des Intensitäts-Feedbacks nach dem Training.
 ```
 
 ---
-*V1 archiviert am 18. März 2026. Phase 8 (V2 Start) abgeschlossen im März 2026.*
+*V1 archiviert am 30. März 2026. Phase 10.1 abgeschlossen.*
