@@ -7,6 +7,8 @@ import '../../core/utils/duration_formatter.dart';
 import '../../widgets/streak_card.dart';
 import '../../widgets/workout_heatmap_widget.dart';
 import '../../widgets/badges_section.dart';
+import '../../core/services/audio_service.dart';
+import '../../core/services/voice_service.dart';
 
 class HistoryPage extends ConsumerWidget {
   const HistoryPage({super.key});
@@ -40,6 +42,29 @@ class HistoryPage extends ConsumerWidget {
                   const BadgesSection(),
                   const Divider(color: kColorTextMuted, thickness: 0.1),
                   const SizedBox(height: 8),
+                  
+                  // DEBUG/TEST BUTTON
+                  Center(
+                    child: OutlinedButton.icon(
+                      onPressed: () async {
+                        final audio = ref.read(audioServiceProvider);
+                        final voice = ref.read(voiceServiceProvider);
+                        
+                        await audio.playWork();
+                        await voice.speak("Audio-Test gestartet.");
+                        await Future.delayed(const Duration(seconds: 1));
+                        await audio.playTransition();
+                        await voice.speak("Test erfolgreich abgeschlossen.");
+                      },
+                      icon: const Icon(Icons.volume_up, color: kColorAccent),
+                      label: const Text('Audio & Voice Test', style: TextStyle(color: kColorAccent)),
+                      style: OutlinedButton.styleFrom(
+                        side: const BorderSide(color: kColorAccent),
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
                 ],
               ),
             ),
@@ -149,7 +174,6 @@ class HistoryPage extends ConsumerWidget {
             ),
         ],
       ),
-    );
     );
   }
 }

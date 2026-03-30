@@ -61,7 +61,10 @@ class TimerService extends StateNotifier<TimerState> {
     
     _audioService.playTransition();
     if (_steps.isNotEmpty) {
-      _voiceService.speak("Training startet. ${_steps[0].exercise.name}");
+      // Delay voice for a moment to ensure user is ready and engine is warm
+      Future.delayed(const Duration(milliseconds: 500), () {
+        _voiceService.speak("Training startet. ${_steps[0].exercise.name}");
+      });
     }
     _startTimer();
   }

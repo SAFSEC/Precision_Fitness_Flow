@@ -16,13 +16,14 @@ class WorkoutSessionAdapter extends TypeAdapter<WorkoutSession> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return WorkoutSession()
-      ..workoutId = fields[0] as String
-      ..completedAt = fields[1] as DateTime
-      ..durationSeconds = fields[2] as int
-      ..completed = fields[3] as bool
-      ..week = fields[4] as int
-      ..dayOfWeek = fields[5] as int;
+    return WorkoutSession(
+      workoutId: fields[0] as String,
+      completedAt: fields[1] as DateTime,
+      durationSeconds: fields[2] as int,
+      completed: fields[3] as bool,
+      week: fields[4] as int,
+      dayOfWeek: fields[5] as int,
+    );
   }
 
   @override

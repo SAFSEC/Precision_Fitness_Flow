@@ -40,7 +40,7 @@ class _WorkoutCompletePageState extends ConsumerState<WorkoutCompletePage> {
       durationSeconds: 15 * 60, // Default to 15 mins for now, could be dynamic
       completed: true,
       week: trainingDay.week,
-      dayOfWeek: trainingDay.dayOfWeek,
+      dayOfWeek: trainingDay.dayOfWeek ?? 1,
     );
 
     await ref.read(historyServiceProvider.notifier).saveSession(session);

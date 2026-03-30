@@ -15,4 +15,16 @@ class WorkoutSession extends HiveObject {
   late int week;
   @HiveField(5)
   late int dayOfWeek;
+
+  WorkoutSession({
+    required this.workoutId,
+    required this.completedAt,
+    required this.durationSeconds,
+    required this.completed,
+    required this.week,
+    required this.dayOfWeek,
+  });
+
+  // Empty constructor for Hive
+  WorkoutSession.empty();
 }
