@@ -3,11 +3,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:precision_fitness_flow/core/services/audio_service.dart';
+import 'package:precision_fitness_flow/core/services/voice_service.dart';
 import 'package:precision_fitness_flow/data/workout_plan.dart';
 import 'package:precision_fitness_flow/features/workout/hiit_view.dart';
 import 'package:precision_fitness_flow/features/workout/workout_controller.dart';
 
 class MockAudioService extends Mock implements AudioService {}
+class MockVoiceService extends Mock implements VoiceService {}
 
 void main() {
   testWidgets('HiitView displays current round and runs through sequence', (tester) async {
@@ -15,11 +17,15 @@ void main() {
     tester.view.devicePixelRatio = 2.0;
 
     final mockAudioService = MockAudioService();
+    final mockVoiceService = MockVoiceService();
+    
     when(() => mockAudioService.playTransition()).thenAnswer((_) async {});
     when(() => mockAudioService.playWork()).thenAnswer((_) async {});
     when(() => mockAudioService.playRest()).thenAnswer((_) async {});
     when(() => mockAudioService.playTick()).thenAnswer((_) async {});
     when(() => mockAudioService.playComplete()).thenAnswer((_) async {});
+    when(() => mockVoiceService.speak(any())).thenAnswer((_) async {});
+    when(() => mockVoiceService.stop()).thenAnswer((_) async {});
 
     final hiitDay = kProgramHybrid.days.firstWhere((day) => day.type == 'hiit');
     
@@ -27,6 +33,7 @@ void main() {
       ProviderScope(
         overrides: [
           audioServiceProvider.overrideWithValue(mockAudioService),
+          voiceServiceProvider.overrideWithValue(mockVoiceService),
         ],
         child: MaterialApp(
           home: Scaffold(
@@ -62,5 +69,8 @@ void main() {
     // Add teardown to clear screen size
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
+
+    // Settle any pending timers (voice delay)
+    await tester.pump(const Duration(milliseconds: 1000));
   });
 }
