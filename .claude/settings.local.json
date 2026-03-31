@@ -4,7 +4,8 @@
       "Bash(flutter build:*)",
       "Bash(python3 -c \":*)",
       "Bash(flutter test:*)",
-      "Bash(flutter run:*)"
+      "Bash(flutter run:*)",
+      "Bash(flutter analyze:*)"
     ]
   }
 }

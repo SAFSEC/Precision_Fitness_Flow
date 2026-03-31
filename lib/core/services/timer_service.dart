@@ -124,8 +124,31 @@ class TimerService extends StateNotifier<TimerState> {
     );
   }
 
+  void restartRound() {
+    _timer?.cancel();
+    _currentExerciseIndex = 0;
+    state = TimerState(
+      phase: TimerPhase.transition,
+      remainingSeconds: kTransitionSeconds,
+      currentRound: 1,
+      totalRounds: state.totalRounds,
+      currentSetIndex: 1,
+      totalSets: 1,
+      currentExercise: null,
+      nextExercise: _steps.isNotEmpty ? _steps[0].exercise : null,
+      isRunning: true,
+    );
+    _audioService.playTransition();
+    if (_steps.isNotEmpty) {
+      Future.delayed(const Duration(milliseconds: 500), () {
+        _voiceService.speak("Neue Runde. ${_steps[0].exercise.name}");
+      });
+    }
+    _startTimer();
+  }
+
   void skipPhase() {
-    if (state.isRunning) {
+    if (state.isRunning && state.phase != TimerPhase.roundCompleted) {
       _handlePhaseEnd();
     }
   }
@@ -188,8 +211,19 @@ class TimerService extends StateNotifier<TimerState> {
         bool isLastRound = state.currentRound == state.totalRounds;
 
         if (isLastExerciseInRound && isLastRound) {
-          // Training beendet
-          completeWorkout();
+          // Runde beendet – Nutzer wählt Beenden oder Neustart
+          _timer?.cancel();
+          _hapticService.vibrate();
+          _audioService.playComplete();
+          _voiceService.speak("Runde abgeschlossen. Super Arbeit!");
+          state = state.copyWith(
+            phase: TimerPhase.roundCompleted,
+            remainingSeconds: 0,
+            isRunning: false,
+            clearCurrentExercise: true,
+            clearNextExercise: true,
+          );
+          return;
         } else if (isLastExerciseInRound) {
           // Runde beendet -> Transition
           _hapticService.vibrate();

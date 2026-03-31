@@ -24,12 +24,8 @@ class WorkoutController extends StateNotifier<bool> {
   void startWorkout() {
     WakelockPlus.enable();
     if (_trainingDay.type == 'hiit') {
-      // Logic for HIIT: usually 4 rounds in week 1, 5 in week 2, 6 in week 3
-      int rounds = 4;
-      if (_trainingDay.week == 2) rounds = 5;
-      if (_trainingDay.week == 3) rounds = 6;
-      
-      _timerService.startHiit(_trainingDay.steps, rounds);
+      // 1 Runde – Nutzer wählt danach Beenden oder Neustart
+      _timerService.startHiit(_trainingDay.steps, 1);
     } else {
       // Logic for Strength: Start with idle/first exercise
       // No active timer to start immediately for strength, it's set-based
@@ -64,5 +60,9 @@ class WorkoutController extends StateNotifier<bool> {
 
   void skipPhase() {
     _timerService.skipPhase();
+  }
+
+  void restartRound() {
+    _timerService.restartRound();
   }
 }

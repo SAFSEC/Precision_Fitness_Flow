@@ -29,6 +29,10 @@ class PhaseIndicator extends StatelessWidget {
         text = 'DONE';
         color = kColorAccent;
         break;
+      case TimerPhase.roundCompleted:
+        text = 'DONE';
+        color = kColorAccent;
+        break;
       case TimerPhase.idle:
       default:
         text = 'READY';

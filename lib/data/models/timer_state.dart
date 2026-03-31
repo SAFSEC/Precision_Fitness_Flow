@@ -1,6 +1,6 @@
 import 'exercise.dart';
 
-enum TimerPhase { idle, work, rest, transition, completed }
+enum TimerPhase { idle, work, rest, transition, roundCompleted, completed }
 
 class TimerState {
   final TimerPhase phase;

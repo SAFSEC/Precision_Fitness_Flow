@@ -19,7 +19,12 @@ class HiitView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final timerState = ref.watch(timerServiceProvider);
     final workoutController = ref.read(workoutControllerProvider(trainingDay).notifier);
-    
+
+    // Runde abgeschlossen → Overlay zeigen
+    if (timerState.phase == TimerPhase.roundCompleted) {
+      return _buildRoundCompletedOverlay(context, workoutController);
+    }
+
     // Determine max seconds for the current phase for proper progress ring
     int maxSeconds = 0;
     if (timerState.phase == TimerPhase.work) {
@@ -32,7 +37,7 @@ class HiitView extends ConsumerWidget {
          maxSeconds = kTransitionSeconds; // Initial prep delay
       }
     }
-    
+
     return Column(
       children: [
         const SizedBox(height: 24),
@@ -164,6 +169,66 @@ class HiitView extends ConsumerWidget {
         ),
         
         const SizedBox(height: 24),
+      ],
+    );
+  }
+
+  Widget _buildRoundCompletedOverlay(BuildContext context, WorkoutController controller) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const Icon(
+          Icons.emoji_events,
+          color: kColorAccent,
+          size: 72,
+        ),
+        const SizedBox(height: 24),
+        const Text(
+          'Runde abgeschlossen!',
+          style: TextStyle(
+            fontSize: 32,
+            fontWeight: FontWeight.bold,
+            color: kColorText,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 12),
+        const Text(
+          'Super Arbeit! Was möchtest du tun?',
+          style: TextStyle(fontSize: 16, color: kColorTextMuted),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 48),
+        ElevatedButton.icon(
+          icon: const Icon(Icons.refresh),
+          label: const Text(
+            'Neustart',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: kColorAccent,
+            foregroundColor: kColorText,
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          ),
+          onPressed: () => controller.restartRound(),
+        ),
+        const SizedBox(height: 16),
+        OutlinedButton.icon(
+          icon: const Icon(Icons.check_circle_outline),
+          label: const Text(
+            'Training beenden',
+            style: TextStyle(fontSize: 18),
+          ),
+          style: OutlinedButton.styleFrom(
+            foregroundColor: kColorTextMuted,
+            side: const BorderSide(color: kColorTextMuted),
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          ),
+          onPressed: () => controller.completeWorkout(),
+        ),
       ],
     );
   }
