@@ -95,6 +95,14 @@ Offene Phasen: 11, 12
 59. **Bugfix: Model-Sync**: `WorkoutSession` Model um formalen Konstruktor erweitert, um Type-Safety (late fields) und Integration in `WorkoutCompletePage` zu garantieren. `dayOfWeek` Handling (nullable) robustifiziert.
 60. **CI/CD: Test-Fix**: `HiitView` Widget-Test repariert. Mocking von `VoiceService` und explizites Flushing von `Future.delayed` Timers hinzugefügt, um "Pending Timers" Fehler in GitHub Actions zu verhindern.
 
+**Phase 10.2 – HIIT-Rundensteuerung (31. März 2026)**
+61. **UX: 1-Runden-Modus für HIIT**: HIIT-Trainings (Tag 2 & 4) laufen jetzt nur noch **eine Runde** durch die gesamte Übungssequenz (~5–9 Min), statt automatisch 4 Runden zu wiederholen. Ziel: jede Einheit max. 15–30 Minuten.
+62. **Feature: Beenden / Neustart-Overlay**: Nach Abschluss einer Runde erscheint ein Overlay mit zwei Optionen:
+    - **"Neustart"** → startet sofort eine weitere Runde (der Nutzer bestimmt selbst die Gesamtdauer)
+    - **"Training beenden"** → navigiert zur Abschluss-Seite (History-Eintrag + Badge-Check)
+63. **Tech: `TimerPhase.roundCompleted`**: Neuer Zustand im `TimerPhase`-Enum. `TimerService` setzt diesen Zustand statt `completeWorkout()` zu rufen, wenn die letzte Übung der Sequenz beendet ist. Neue `restartRound()`-Methode setzt den Index zurück und startet den Transition-Countdown erneut.
+64. **Refactor: `WorkoutController`**: Wochenbasierte Runden-Berechnung (4/5/6 Runden) entfernt. HIIT startet nun immer mit `rounds = 1`.
+
 ---
 
 ## 2. Historischer Starter-Prompt (Cursor / Claude Code)
@@ -111,4 +119,4 @@ Startpunkt für die nächste Sitzung: Implementierung des Intensitäts-Feedbacks
 ```
 
 ---
-*V1 archiviert am 30. März 2026. Phase 10.1 abgeschlossen.*
+*V1 archiviert am 30. März 2026. Phase 10.1 abgeschlossen. Phase 10.2 abgeschlossen am 31. März 2026.*

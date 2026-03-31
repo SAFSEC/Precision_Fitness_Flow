@@ -9,17 +9,17 @@ Stelle keine Fragen – alle Entscheidungen sind hier getroffen.
 
 ## Entwicklungsstand
 ```
-Stand: 30. März 2026
-Abgeschlossene Phasen: 1, 2, 3, 4, 5, 6, 6.5, 7, 8, 9, 9.1, 9.2, 9.3, 9.4, 10, 10.1 (CI & Audio-Fixes)
+Stand: 31. März 2026
+Abgeschlossene Phasen: 1, 2, 3, 4, 5, 6, 6.5, 7, 8, 9, 9.1, 9.2, 9.3, 9.4, 10, 10.1, 10.2
 Offene Phasen: 11, 12
 Bekannte Probleme: –
 Nächster Schritt: Phase 11 – Smarte Steuerung & Feedback
 Privacy-Stack: nicht aktiv (keine personenbezogenen Daten)
 
-- Neuerungen (Phase 10.1):
-- Audio-Polishing: `AudioService` auf `PlayerMode.lowLatency` umgestellt und Beep-Assets optimiert.
-- CI/CD Fix: Widget-Tests (`hiit_view_test.dart`) für Voice-Integration robustifiziert (Mocks + Timer-Handling).
-- Model-Konsistenz: `WorkoutSession` Konstruktor und `dayOfWeek` Logik synchronisiert.
+- Neuerungen (Phase 10.2):
+- HIIT-Rundensteuerung: HIIT läuft nur noch 1 Runde (~5–9 Min), danach Overlay mit "Neustart" oder "Training beenden".
+- Neuer TimerPhase.roundCompleted Zustand; restartRound() Methode in TimerService + WorkoutController.
+- Wochenbasierte Runden-Multiplikation (4/5/6) entfernt – Nutzer bestimmt Umfang selbst.
 ```
 
 
