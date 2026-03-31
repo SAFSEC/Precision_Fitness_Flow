@@ -6,7 +6,6 @@ import '../../data/models/training_day.dart';
 // Provides the active workout controller
 final workoutControllerProvider = StateNotifierProvider.family<WorkoutController, bool, TrainingDay>((ref, trainingDay) {
   final timerService = ref.read(timerServiceProvider.notifier);
-  // We just return a boolean state for "isFinished" 
   return WorkoutController(timerService, trainingDay);
 });
 
@@ -52,6 +51,10 @@ class WorkoutController extends StateNotifier<bool> {
     WakelockPlus.disable();
     _timerService.cancel();
     state = true; // Mark as finished/cancelled to navigate away
+  }
+  
+  void completeWorkout() {
+    _timerService.completeWorkout();
   }
   
   void startStrengthRest(int restSeconds, int currentSet, int totalSets) {

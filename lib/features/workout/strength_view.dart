@@ -179,7 +179,7 @@ class StrengthView extends ConsumerWidget {
                    final isLastSet = timerState.currentSetIndex == totalSets;
                    
                    if (isLastSet) {
-                     workoutController.cancelWorkout();
+                     workoutController.completeWorkout();
                    } else {
                      final defaultRest = trainingDay.week == 3 ? kStrengthRestWeek3 : kStrengthRestSeconds;
                      final restDuration = currentStep.restSeconds ?? defaultRest;

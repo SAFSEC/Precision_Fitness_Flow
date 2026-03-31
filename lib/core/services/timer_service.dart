@@ -98,6 +98,18 @@ class TimerService extends StateNotifier<TimerState> {
     }
   }
 
+  void completeWorkout() {
+    _timer?.cancel();
+    _audioService.playComplete();
+    state = state.copyWith(
+      phase: TimerPhase.completed,
+      remainingSeconds: 0,
+      isRunning: false,
+      clearCurrentExercise: true,
+      clearNextExercise: true,
+    );
+  }
+
   void cancel() {
     _timer?.cancel();
     _voiceService.stop();
@@ -127,12 +139,12 @@ class TimerService extends StateNotifier<TimerState> {
            _voiceService.speak("Noch 10 Sekunden");
         }
         
-        if (newRemaining == 5 && _isHiit && 
+        if (newRemaining == 5 && 
             (state.phase == TimerPhase.work || state.phase == TimerPhase.rest || state.phase == TimerPhase.transition)) {
            _voiceService.speak("Noch 5 Sekunden");
         }
         
-        if (newRemaining > 0 && newRemaining <= 3) {
+        if (newRemaining > 0 && newRemaining <= 5) {
            _audioService.playTick();
         }
         
@@ -177,15 +189,7 @@ class TimerService extends StateNotifier<TimerState> {
 
         if (isLastExerciseInRound && isLastRound) {
           // Training beendet
-           _timer?.cancel();
-           _audioService.playComplete();
-           state = state.copyWith(
-             phase: TimerPhase.completed,
-             remainingSeconds: 0,
-             isRunning: false,
-             clearCurrentExercise: true,
-             clearNextExercise: true,
-           );
+          completeWorkout();
         } else if (isLastExerciseInRound) {
           // Runde beendet -> Transition
           _hapticService.vibrate();

@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/constants/app_colors.dart';
+import '../../data/models/timer_state.dart';
 import '../../data/models/training_day.dart';
 import '../../core/providers/active_program_provider.dart';
+import '../../core/services/timer_service.dart';
 import 'hiit_view.dart';
 import 'strength_view.dart';
 import 'workout_controller.dart';
@@ -38,9 +40,10 @@ class _WorkoutPageState extends ConsumerState<WorkoutPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Listen to workout conclusion (isFinished == true)
-    ref.listen<bool>(workoutControllerProvider(_trainingDay), (previous, isFinished) {
-      if (isFinished) {
+    // Direkt auf Timer-Completion hören – zuverlässiger als die 2-Stufen-Kette
+    ref.listen<TimerState>(timerServiceProvider, (previous, next) {
+      if (next.phase == TimerPhase.completed &&
+          previous?.phase != TimerPhase.completed) {
         context.go('/workout/${widget.dayId}/complete');
       }
     });
