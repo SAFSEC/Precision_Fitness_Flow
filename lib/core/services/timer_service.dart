@@ -263,6 +263,7 @@ class TimerService extends StateNotifier<TimerState> {
         break;
       case TimerPhase.idle:
       case TimerPhase.completed:
+      case TimerPhase.roundCompleted:
         _timer?.cancel();
         break;
     }

@@ -127,9 +127,9 @@ void main() {
     timerService.skipPhase();
     expect(timerService.state.phase, TimerPhase.work);
 
-    // Skip Work (e2) -> Complete! (end of round 2 which is the last)
+    // Skip Work (e2) -> RoundCompleted! (end of round 2, user chooses Beenden or Neustart)
     timerService.skipPhase();
-    expect(timerService.state.phase, TimerPhase.completed);
+    expect(timerService.state.phase, TimerPhase.roundCompleted);
     verify(() => mockAudioService.playComplete()).called(1);
   });
 
