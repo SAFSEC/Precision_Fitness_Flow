@@ -6,8 +6,8 @@ Dieses Dokument archiviert die abgeschlossenen Entwicklungsphasen und den Prozes
 
 ## Entwicklungsstand (V1.0 + Bugfix-Session abgeschlossen)
 ```
-Stand: 30. März 2026
-Abgeschlossene Phasen: 1, 2, 3, 4, 5, 6, 6.5, 7, 8, 9, 9.1, 9.2, 9.3, 9.4, 10, 10.1 (CI & Audio-Fixes)
+Stand: 07. April 2026
+Abgeschlossene Phasen: 1, 2, 3, 4, 5, 6, 6.5, 7, 8, 9, 9.1, 9.2, 9.3, 9.4, 10, 10.1, 10.2, 10.3
 Offene Phasen: 11, 12
 ```
 
@@ -118,5 +118,11 @@ Nächster Schritt: Phase 11 (Smarte Steuerung & Feedback).
 Startpunkt für die nächste Sitzung: Implementierung des Intensitäts-Feedbacks nach dem Training.
 ```
 
+**Phase 10.3 – Geführte Auswahl & Plan-Erweiterung (07. April 2026)**
+65. **UI: Geführtes Auswahlmenü**: Implementierung eines 2-Stufen-Wizards (`PlanSelectionPage`) für die strukturierte Auswahl von Trainingszielen (Kategorien) und spezifischen Programmen.
+66. **Feature: Bodyweight Focus**: Integration eines neuen 5-Tage Bodyweight-Trainingsplans ohne Geräte in `workout_plan.dart`.
+67. **UX: Discovery Card**: Neue Premium-CTA auf dem Home-Screen zur Förderung neuer Trainingspläne.
+68. **Model: Category & Icon Metadata**: `WorkoutProgram` um `category` und `icon` erweitert zur Unterstützung hierarchischer Menüs.
+
 ---
-*V1 archiviert am 30. März 2026. Phase 10.1 abgeschlossen. Phase 10.2 abgeschlossen am 31. März 2026.*
+*V1 archiviert am 30. März 2026. Phase 10.1 abgeschlossen. Phase 10.2 abgeschlossen am 31. März 2026. Phase 10.3 abgeschlossen am 07. April 2026.*

@@ -69,6 +69,11 @@ class HomePage extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 24),
+            
+            // New Plan Discovery Card
+            _buildPlanDiscoveryCard(context),
+            
+            const SizedBox(height: 24),
 
             // Active Day Options
             ...allDaysForCurrentLogicalDay.map((dayOption) {
@@ -203,6 +208,71 @@ class HomePage extends ConsumerWidget {
             ),
           )
         ],
+      ),
+    );
+  }
+
+  Widget _buildPlanDiscoveryCard(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Color(0xFFF78166), Color(0xFFC0392B)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: kColorAccent.withOpacity(0.3),
+            blurRadius: 15,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () => context.push('/plan-selection'),
+          borderRadius: BorderRadius.circular(16),
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Row(
+              children: [
+                const Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Neuen Trainingsplan entdecken',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        'Schritt-für-Schritt zum perfekten Ziel',
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.2),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.explore, color: Colors.white, size: 28),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

@@ -9,17 +9,17 @@ Stelle keine Fragen – alle Entscheidungen sind hier getroffen.
 
 ## Entwicklungsstand
 ```
-Stand: 31. März 2026
-Abgeschlossene Phasen: 1, 2, 3, 4, 5, 6, 6.5, 7, 8, 9, 9.1, 9.2, 9.3, 9.4, 10, 10.1, 10.2
+Stand: 07. April 2026
+Abgeschlossene Phasen: 1, 2, 3, 4, 5, 6, 6.5, 7, 8, 9, 9.1, 9.2, 9.3, 9.4, 10, 10.1, 10.2, 10.3
 Offene Phasen: 11, 12
 Bekannte Probleme: –
 Nächster Schritt: Phase 11 – Smarte Steuerung & Feedback
 Privacy-Stack: nicht aktiv (keine personenbezogenen Daten)
 
-- Neuerungen (Phase 10.2):
-- HIIT-Rundensteuerung: HIIT läuft nur noch 1 Runde (~5–9 Min), danach Overlay mit "Neustart" oder "Training beenden".
-- Neuer TimerPhase.roundCompleted Zustand; restartRound() Methode in TimerService + WorkoutController.
-- Wochenbasierte Runden-Multiplikation (4/5/6) entfernt – Nutzer bestimmt Umfang selbst.
+- Neuerungen (Phase 10.3):
+- Geführtes 2-Stufen-Auswahlmenü für Trainingspläne (Kategorie -> Plan).
+- Neuer dedizierter Bodyweight-Fokus Plan (5 Tage).
+- Discovery-Card auf dem Home-Screen zur besseren Navigation.
 ```
 
 

@@ -8,12 +8,18 @@ import '../../features/exercises/exercise_list_page.dart';
 import '../../features/exercises/exercise_detail_page.dart';
 import '../../features/history/history_page.dart';
 
+import '../../features/plan_selection/plan_selection_page.dart';
+
 final GoRouter appRouter = GoRouter(
   initialLocation: '/',
   routes: [
     GoRoute(
       path: '/',
       builder: (context, state) => const HomePage(),
+    ),
+    GoRoute(
+      path: '/plan-selection',
+      builder: (context, state) => const PlanSelectionPage(),
     ),
     GoRoute(
       path: '/plan',

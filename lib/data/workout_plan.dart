@@ -212,6 +212,8 @@ const kProgramHybrid = WorkoutProgram(
   id: 'hybrid_pp_5day',
   title: '5-Tage Muskelaufbau & HIIT',
   description: 'Wöchentlicher Fokus auf Kraft und HIIT. 3x Kraft, 2x HIIT, 2x Regeneration.',
+  category: 'Hybrid & Performance',
+  icon: '⚡',
   days: [
     // --- MONTAG (Krafttraining) ---
     TrainingDay(
@@ -447,12 +449,84 @@ const kProgramHybrid = WorkoutProgram(
   ],
 );
 
-// We keep kProgram3Weeks as the fallback for "Classic" if needed, 
-// or the user can just delete it later. It is defined minimally to satisfy older code if any.
+const kProgramBodyweight = WorkoutProgram(
+  id: 'bodyweight_5day',
+  title: 'Bodyweight Focus (No Equipment)',
+  description: 'Maximaler Muskelaufbau ohne Geräte. Fokus auf Technik und Progression.',
+  category: 'Bodyweight (Zuhause)',
+  icon: '🏠',
+  days: [
+    TrainingDay(
+      id: 'bw_mon',
+      week: 1,
+      dayOfWeek: 1,
+      title: 'Montag – Bodyweight Kraft',
+      type: 'strength',
+      steps: [
+        WorkoutStep(exercise: pushUps, sets: 3, reps: 15, restSeconds: 60),
+        WorkoutStep(exercise: squats, sets: 3, reps: 20, restSeconds: 60),
+        WorkoutStep(exercise: lunges, sets: 3, reps: 15, restSeconds: 60),
+      ],
+    ),
+    TrainingDay(
+      id: 'bw_tue',
+      week: 1,
+      dayOfWeek: 2,
+      title: 'Dienstag – HIIT Core',
+      type: 'hiit',
+      steps: [
+        WorkoutStep(exercise: mountainClimbers, durationSeconds: 30, restSeconds: 20),
+        WorkoutStep(exercise: jumpingJacks, durationSeconds: 30, restSeconds: 20),
+        WorkoutStep(exercise: mountainClimbers, durationSeconds: 30, restSeconds: 20),
+        WorkoutStep(exercise: jumpingJacks, durationSeconds: 30, restSeconds: 20),
+      ],
+    ),
+    TrainingDay(
+      id: 'bw_wed',
+      week: 1,
+      dayOfWeek: 3,
+      title: 'Mittwoch – Bodyweight Power',
+      type: 'strength',
+      steps: [
+        WorkoutStep(exercise: diamondPushUps, sets: 3, reps: 12, restSeconds: 60),
+        WorkoutStep(exercise: pulsingSquats, sets: 3, reps: 20, restSeconds: 45),
+        WorkoutStep(exercise: plank, durationSeconds: 45, restSeconds: 30),
+      ],
+    ),
+    TrainingDay(
+      id: 'bw_thu',
+      week: 1,
+      dayOfWeek: 4,
+      title: 'Donnerstag – HIIT Intense',
+      type: 'hiit',
+      steps: [
+        WorkoutStep(exercise: burpees, durationSeconds: 30, restSeconds: 15),
+        WorkoutStep(exercise: jumpingSquats, durationSeconds: 30, restSeconds: 15),
+        WorkoutStep(exercise: burpees, durationSeconds: 30, restSeconds: 15),
+        WorkoutStep(exercise: jumpingSquats, durationSeconds: 30, restSeconds: 15),
+      ],
+    ),
+    TrainingDay(
+      id: 'bw_fri',
+      week: 1,
+      dayOfWeek: 5,
+      title: 'Freitag – Bodyweight Finale',
+      type: 'strength',
+      steps: [
+        WorkoutStep(exercise: inclinePushUps, sets: 3, reps: 15, restSeconds: 60),
+        WorkoutStep(exercise: walkingLunges, sets: 3, reps: 20, restSeconds: 60),
+        WorkoutStep(exercise: wallSit, durationSeconds: 60, restSeconds: 30),
+      ],
+    ),
+  ],
+);
+
 const kProgram3Weeks = WorkoutProgram(
   id: 'classic_3w',
   title: 'Classic 3-Wochen (Legacy)',
   description: 'Veralteter starrer 21-Tage Plan',
+  category: 'Legacy & Classic',
+  icon: '📜',
   days: [
     TrainingDay(id: 'w1d1', week: 1, title: 'Tag 1', type: 'strength', steps: []),
   ]
@@ -461,6 +535,8 @@ const kProgram3Weeks = WorkoutProgram(
 // Unified list of all programs
 final kAllPrograms = [
   kProgramHybrid,
+  kProgramBodyweight,
+  kProgram3Weeks,
 ];
 
 final kExercises = [
