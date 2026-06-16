@@ -1,44 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'home_controller.dart';
-import '../../widgets/week_progress_bar.dart';
 import '../../core/constants/app_colors.dart';
 import '../../data/workout_plan.dart';
 import '../../data/models/training_day.dart';
+import '../../data/models/workout_step.dart';
 import '../../core/providers/active_program_provider.dart';
+import '../../core/services/history_service.dart';
+import '../../data/models/workout_session.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Read state from HomeController
-    final state = ref.watch(homeControllerProvider);
-    final activeDay = state.activeDay;
     final activeProgram = ref.watch(activeProgramProvider);
-    
-    // Find all day options for this specific logical day
-    final allDaysForCurrentLogicalDay = activeProgram.days.where((d) => 
-        d.week == activeDay.week && d.dayOfWeek == activeDay.dayOfWeek).toList();
+    final historyList = ref.watch(historyListProvider);
+
+    final workoutDays = activeProgram.days.where((d) => d.type != 'rest').toList();
+    final recentSessions = historyList.take(3).toList();
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Precision Fitness & Flow', style: TextStyle(fontWeight: FontWeight.w700)),
+        title: const Text('Training', style: TextStyle(fontWeight: FontWeight.w700)),
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.swap_horiz),
-            color: kColorTextMuted,
-            onPressed: () => _showPlanSelection(context, ref),
-            tooltip: 'Trainingsplan wechseln',
-          ),
-          IconButton(
-            icon: const Icon(Icons.calendar_month),
-            onPressed: () => context.push('/plan'),
-            tooltip: 'Plan Übersicht',
-          ),
           IconButton(
             icon: const Icon(Icons.history),
             onPressed: () => context.push('/history'),
@@ -46,245 +33,110 @@ class HomePage extends ConsumerWidget {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Headings
-            const Text(
-              'Guten Tag.',
-              style: TextStyle(
-                color: kColorTextMuted,
-                fontSize: 16,
+      body: CustomScrollView(
+        slivers: [
+          // Plan Selector
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 4, 20, 16),
+              child: _PlanChip(
+                programTitle: activeProgram.title,
+                onTap: () => _showPlanSelection(context, ref),
               ),
             ),
-            const SizedBox(height: 8),
-            const Text(
-              'Wähle dein heutiges Training',
-              style: TextStyle(
-                color: kColorText,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 24),
-            
-            // New Plan Discovery Card
-            _buildPlanDiscoveryCard(context),
-            
-            const SizedBox(height: 24),
-
-            // Active Day Options
-            ...allDaysForCurrentLogicalDay.map((dayOption) {
-               return _buildDayCard(context, dayOption);
-            }),
-
-            const SizedBox(height: 16),
-            WeekProgressBar(
-              currentWeek: state.currentWeek,
-              completedIds: state.completedIds,
-            ),
-            
-            const SizedBox(height: 32),
-            Center(
-              child: TextButton(
-                onPressed: () => context.push('/plan'),
-                child: const Text(
-                  'Gesamten Plan ansehen',
-                  style: TextStyle(color: kColorText),
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDayCard(BuildContext context, TrainingDay day) {
-    String typeLabel = '';
-    Color typeColor = kColorWork;
-
-    if (day.type == 'strengthA' || day.type == 'strength') {
-      typeLabel = day.type == 'strengthA' ? 'Kraft-Tag A' : 'Kraft-Tag';
-    } else if (day.type == 'strengthB') {
-      typeLabel = 'Kraft-Tag B';
-    } else if (day.type == 'hiit') {
-      typeLabel = 'HIIT Flow';
-      typeColor = kColorAccent;
-    } else {
-      typeLabel = 'Regeneration';
-      typeColor = kColorRest;
-    }
-
-    return Container(
-      margin: const EdgeInsets.only(bottom: 24),
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: kColorSurface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
           ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                day.optionLabel ?? 'Woche ${day.week} / Tag ${day.dayOfWeek ?? ""}',
-                style: const TextStyle(
-                  color: kColorAccent,
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: typeColor.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(4),
-                  border: Border.all(color: typeColor.withOpacity(0.5)),
-                ),
-                child: Text(
-                  typeLabel,
-                  style: TextStyle(
-                    color: typeColor,
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              )
-            ],
-          ),
-          const SizedBox(height: 16),
-          Text(
-            day.title,
-            style: const TextStyle(
-              color: kColorText,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            day.steps.isNotEmpty
-                ? '${day.steps.length} Übungen'
-                : 'Zeit für Stretching oder Tai Chi',
-            style: const TextStyle(color: kColorTextMuted),
-          ),
-          const SizedBox(height: 32),
-          SizedBox(
-            width: double.infinity,
-            height: 56,
-            child: ElevatedButton(
-              onPressed: () {
-                context.push('/workout/${day.id}');
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: kColorAccent,
-                foregroundColor: kColorBackground,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                elevation: 0,
-              ),
-              child: const Text(
-                 'TRAINING STARTEN',
+
+          // Section Header
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(20, 0, 20, 12),
+              child: Text(
+                'Workout wählen',
                 style: TextStyle(
-                  fontSize: 16,
+                  color: kColorText,
+                  fontSize: 22,
                   fontWeight: FontWeight.bold,
-                  letterSpacing: 1.2,
                 ),
               ),
             ),
-          )
+          ),
+
+          // Workout Cards
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            sliver: SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  final day = workoutDays[index];
+                  final tagNumber = _tagNumber(workoutDays, day);
+                  return _WorkoutCard(day: day, tagNumber: tagNumber);
+                },
+                childCount: workoutDays.length,
+              ),
+            ),
+          ),
+
+          // Recent Sessions Header
+          if (recentSessions.isNotEmpty) ...[
+            const SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(20, 24, 20, 12),
+                child: Text(
+                  'Zuletzt trainiert',
+                  style: TextStyle(
+                    color: kColorTextMuted,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+              ),
+            ),
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) => _RecentSessionTile(
+                    session: recentSessions[index],
+                  ),
+                  childCount: recentSessions.length,
+                ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Center(
+                child: TextButton(
+                  onPressed: () => context.push('/history'),
+                  child: const Text(
+                    'Alle anzeigen',
+                    style: TextStyle(color: kColorTextMuted, fontSize: 13),
+                  ),
+                ),
+              ),
+            ),
+          ],
+
+          const SliverToBoxAdapter(child: SizedBox(height: 32)),
         ],
       ),
     );
   }
 
-  Widget _buildPlanDiscoveryCard(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFFF78166), Color(0xFFC0392B)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: kColorAccent.withOpacity(0.3),
-            blurRadius: 15,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: () => context.push('/plan-selection'),
-          borderRadius: BorderRadius.circular(16),
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Row(
-              children: [
-                const Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Neuen Trainingsplan entdecken',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 4),
-                      Text(
-                        'Schritt-für-Schritt zum perfekten Ziel',
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 13,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(Icons.explore, color: Colors.white, size: 28),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
+  int _tagNumber(List<TrainingDay> days, TrainingDay day) {
+    final uniqueDays = days.map((d) => d.dayOfWeek ?? 0).toSet().toList()..sort();
+    return uniqueDays.indexOf(day.dayOfWeek ?? 0) + 1;
   }
 
   void _showPlanSelection(BuildContext context, WidgetRef ref) {
     final activeProgram = ref.read(activeProgramProvider);
-    
+
     showModalBottomSheet(
       context: context,
       backgroundColor: kColorSurface,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
-      builder: (context) {
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (ctx) {
         return SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 24.0),
@@ -296,32 +148,45 @@ class HomePage extends ConsumerWidget {
                   padding: EdgeInsets.symmetric(horizontal: 24.0),
                   child: Text(
                     'Trainingsplan wählen',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: kColorText),
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: kColorText,
+                    ),
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 12),
                 ...kAllPrograms.map((program) {
                   final isActive = program.id == activeProgram.id;
                   return ListTile(
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
-                    leading: Icon(
-                      isActive ? Icons.radio_button_checked : Icons.radio_button_unchecked,
-                      color: isActive ? kColorAccent : kColorTextMuted,
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 24.0,
+                      vertical: 4.0,
+                    ),
+                    leading: Text(
+                      program.icon ?? '📋',
+                      style: const TextStyle(fontSize: 24),
                     ),
                     title: Text(
                       program.title,
                       style: TextStyle(
-                        color: isActive ? kColorText : kColorTextMuted,
+                        color: isActive ? kColorAccent : kColorText,
                         fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+                        fontSize: 15,
                       ),
                     ),
-                    subtitle: Padding(
-                      padding: const EdgeInsets.only(top: 4.0),
-                      child: Text(program.description, style: const TextStyle(color: kColorTextMuted, fontSize: 12)),
+                    subtitle: Text(
+                      program.description,
+                      style: const TextStyle(color: kColorTextMuted, fontSize: 12),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
+                    trailing: isActive
+                        ? const Icon(Icons.check_circle, color: kColorAccent, size: 20)
+                        : null,
                     onTap: () {
                       ref.read(activeProgramProvider.notifier).setProgram(program);
-                      Navigator.pop(context);
+                      Navigator.pop(ctx);
                     },
                   );
                 }),
@@ -331,5 +196,255 @@ class HomePage extends ConsumerWidget {
         );
       },
     );
+  }
+}
+
+class _PlanChip extends StatelessWidget {
+  final String programTitle;
+  final VoidCallback onTap;
+
+  const _PlanChip({required this.programTitle, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: kColorSurface,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: Colors.white12),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.fitness_center, size: 14, color: kColorAccent),
+            const SizedBox(width: 6),
+            Flexible(
+              child: Text(
+                programTitle,
+                style: const TextStyle(
+                  color: kColorTextMuted,
+                  fontSize: 13,
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            const SizedBox(width: 4),
+            const Icon(Icons.expand_more, size: 16, color: kColorTextMuted),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _WorkoutCard extends StatelessWidget {
+  final TrainingDay day;
+  final int tagNumber;
+
+  const _WorkoutCard({required this.day, required this.tagNumber});
+
+  @override
+  Widget build(BuildContext context) {
+    final isHiit = day.type == 'hiit';
+    final typeColor = isHiit ? kColorAccent : kColorWork;
+    final typeLabel = isHiit ? 'HIIT' : 'Kraft';
+    final typeIcon = isHiit ? Icons.bolt : Icons.fitness_center;
+    final summary = _buildSummary(day.steps);
+    final displayTitle = _replaceWeekday(day.title, tagNumber);
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      decoration: BoxDecoration(
+        color: kColorSurface,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: Colors.white10),
+      ),
+      child: InkWell(
+        onTap: () => context.push('/workout/${day.id}'),
+        borderRadius: BorderRadius.circular(14),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: typeColor.withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(typeIcon, color: typeColor, size: 22),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      displayTitle,
+                      style: const TextStyle(
+                        color: kColorText,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 3),
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: typeColor.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Text(
+                            typeLabel,
+                            style: TextStyle(
+                              color: typeColor,
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          summary,
+                          style: const TextStyle(
+                            color: kColorTextMuted,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              ElevatedButton(
+                onPressed: () => context.push('/workout/${day.id}'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: typeColor,
+                  foregroundColor: kColorBackground,
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  elevation: 0,
+                  minimumSize: Size.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                child: const Text(
+                  'Start',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  static const _weekdays = [
+    'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag',
+    'Freitag', 'Samstag', 'Sonntag',
+  ];
+
+  String _replaceWeekday(String title, int tagNum) {
+    for (final day in _weekdays) {
+      if (title.startsWith(day)) {
+        return title.replaceFirst(day, 'Tag $tagNum');
+      }
+    }
+    return title;
+  }
+
+  String _buildSummary(List<WorkoutStep> steps) {
+    if (steps.isEmpty) return 'Keine Übungen';
+    final uniqueExercises = steps.map((s) => s.exercise.id).toSet().length;
+    final hasSets = steps.any((s) => s.sets != null && s.sets! > 0);
+    if (hasSets) {
+      final sets = steps.first.sets ?? 3;
+      final reps = steps.first.reps ?? 0;
+      return '$uniqueExercises Übungen · ${sets}×$reps Wdh';
+    } else {
+      return '$uniqueExercises Übungen · Intervall';
+    }
+  }
+}
+
+class _RecentSessionTile extends StatelessWidget {
+  final WorkoutSession session;
+
+  const _RecentSessionTile({required this.session});
+
+  @override
+  Widget build(BuildContext context) {
+    final date = session.completedAt;
+    final now = DateTime.now();
+    final diff = now.difference(date);
+    String dateLabel;
+    if (diff.inDays == 0) {
+      dateLabel = 'Heute';
+    } else if (diff.inDays == 1) {
+      dateLabel = 'Gestern';
+    } else {
+      dateLabel = '${date.day}.${date.month}.${date.year}';
+    }
+
+    final minutes = (session.durationSeconds / 60).round();
+    final statusColor = session.completed ? kColorWork : kColorSafetyHint;
+
+    // Try to find workout title from programs
+    final title = _findWorkoutTitle(session.workoutId);
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      decoration: BoxDecoration(
+        color: kColorSurface,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: statusColor.withOpacity(0.2)),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            session.completed ? Icons.check_circle_outline : Icons.cancel_outlined,
+            color: statusColor,
+            size: 20,
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              title,
+              style: const TextStyle(color: kColorText, fontSize: 13),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          Text(
+            '$dateLabel · ${minutes}min',
+            style: const TextStyle(color: kColorTextMuted, fontSize: 12),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _findWorkoutTitle(String workoutId) {
+    for (final program in kAllPrograms) {
+      for (final day in program.days) {
+        if (day.id == workoutId) return day.title;
+      }
+    }
+    return 'Workout';
   }
 }
